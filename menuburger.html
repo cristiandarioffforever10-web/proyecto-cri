@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotoControl Cri - Rent-to-Own CRM</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .sidebar-link.active {
+            background-color: #1e293b;
+            border-left: 4px solid #3b82f6;
+            color: #ffffff;
+        }
+
+        /* Custom scrollbar for clean dark look */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        /* Toast notification animations */
+        @keyframes slideIn {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-animate {
+            animation: slideIn 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-900 text-slate-100 font-sans antialiased flex h-screen overflow-hidden relative">
+
+    <div id="sidebar-overlay" onclick="toggleSidebar(false)"
+        class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-40 hidden transition-opacity duration-300 opacity-0 pointer-events-none">
+    </div>
+
+    <!-- Toast Notifications Container jaja -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <!-- BARRA LATERAL (SIDEBAR NAVIGATION) -->
+    <aside id="main-sidebar"
+        class="fixed md:static inset-y-0 left-0 z-50 w-64 bg-slate-950 border-r border-slate-800 flex flex-col justify-between shrink-0 select-none transition-all duration-300 ease-in-out -translate-x-full md:translate-x-0">
+        <div>
+            <!-- Header / Logo -->
+            <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-blue-600 p-2 rounded-xl shadow-lg shadow-blue-500/20 shrink-0">
+                        <i data-lucide="bike" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div class="sidebar-text">
+                        <h1 class="font-bold text-base tracking-wide text-white">MotoControl 360</h1>
+                        <p class="text-xs text-slate-400">Rent-to-Own CRM</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menú de Navegación -->
+            <nav class="mt-4 px-3 space-y-1">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard"
+                    class="sidebar-link active w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg text-slate-400 hover:bg-slate-800/60 hover:text-white transition"
+                    title="Dashboard">
+                    <div class="flex items-center space-x-3">
+                        <i data-lucide="layout-dashboard" class="w-5 h-5 shrink-0"></i>
+                        <span class="sidebar-text">Dashboard</span>
+                    </div>
+                </button>
+
+                <button onclick="switchTab('drivers')" id="nav-drivers"
+                    class="sidebar-link w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg text-slate-400 hover:bg-slate-800/60 hover:text-white transition"
+                    title="Conductores">
+                    <div class="flex items-center space-x-3">
+                        <i data-lucide="users" class="w-5 h-5 shrink-0"></i>
+                        <span class="sidebar-text">Conductores</span>
+                    </div>
+                    <span class="sidebar-text bg-slate-800 text-xs text-slate-300 font-bold px-2 py-0.5 rounded-full"
+                        id="count-drivers">0</span>
+                </button>
+
+                <button onclick="switchTab('units')" id="nav-units"
+                    class="sidebar-link w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg text-slate-400 hover:bg-slate-800/60 hover:text-white transition"
+                    title="Vehículos (Flota)">
+                    <div class="flex items-center space-x-3">
+                        <i data-lucide="shield-check" class="w-5 h-5 shrink-0"></i>
+                        <span class="sidebar-text">Vehículos (Flota)</span>
+                    </div>
+                    <span class="sidebar-text bg-slate-800 text-xs text-slate-300 font-bold px-2 py-0.5 rounded-full"
+                        id="count-units">0</span>
+                </button>
+
+                <button onclick="switchTab('contracts')" id="nav-contracts"
+                    class="sidebar-link w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg text-slate-400 hover:bg-slate-800/60 hover:text-white transition"
+                    title="Contratos">
+                    <div class="flex items-center space-x-3">
+                        <i data-lucide="file-text" class="w-5 h-5 shrink-0"></i>
+                        <span class="sidebar-text">Contratos</span>
+                    </div>
+                    <span class="sidebar-text bg-slate-800 text-xs text-slate-300 font-bold px-2 py-0.5 rounded-full"
+                        id="count-contracts">0</span>
+                </button>
+
+                <button onclick="switchTab('transactions')" id="nav-transactions"
+                    class="sidebar-link w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg text-slate-400 hover:bg-slate-800/60 hover:text-white transition"
+                    title="Transacciones">
+                    <div class="flex items-center space-x-3">
+                        <i data-lucide="wallet" class="w-5 h-5 shrink-0"></i>
+                        <span class="sidebar-text">Transacciones</span>
+                    </div>
+                </button>
+
+                <button onclick="switchTab('maintenance')" id="nav-maintenance"
+                    class="sidebar-link w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg text-slate-400 hover:bg-slate-800/60 hover:text-white transition"
+                    title="Mantenimiento">
+                    <div class="flex items-center space-x-3">
+                        <i data-lucide="wrench" class="w-5 h-5 shrink-0"></i>
+                        <span class="sidebar-text">Mantenimiento</span>
+                    </div>
+                    <span class="sidebar-text bg-amber-500/20 text-amber-400 text-xs font-bold px-2 py-0.5 rounded-full"
+                        id="count-maintenance">0</span>
+                </button>
+
+                <button onclick="switchTab('incidents')" id="nav-incidents"
+                    class="sidebar-link w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg text-slate-400 hover:bg-slate-800/60 hover:text-white transition"
+                    title="Incidencias">
+                    <div class="flex items-center space-x-3">
+                        <i data-lucide="alert-triangle" class="w-5 h-5 shrink-0"></i>
+                        <span class="sidebar-text">Incidencias</span>
+                    </div>
+                    <span class="sidebar-text bg-rose-500/20 text-rose-400 text-xs font-bold px-2 py-0.5 rounded-full"
+                        id="count-incidents">0</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- User profile & Data reset -->
+        <div class="p-4 border-t border-slate-800 space-y-3">
+            <button onclick="resetDataToDemo()"
+                class="w-full py-1.5 px-3 bg-slate-900 hover:bg-slate-800 border border-slate-700/80 rounded-lg text-xs text-slate-400 hover:text-white flex items-center justify-center space-x-2 transition"
+                title="Restablecer datos predeterminados">
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 shrink-0"></i>
+                <span class="sidebar-text">Restablecer Datos Demo</span>
+            </button>
+
+            <div class="flex items-center justify-between pt-1">
+                <div class="flex items-center space-x-3 overflow-hidden">
+                    <div
+                        class="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center font-bold text-sm text-white shadow shrink-0">
+                        OP
+                    </div>
+                    <div class="sidebar-text overflow-hidden">
+                        <p class="text-xs font-semibold text-white truncate">Operador Flota</p>
+                        <p class="text-[11px] text-slate-400 truncate">admin@motocontrol.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ÁREA PRINCIPAL DE CONTENIDO -->
+    <main class="flex-1 overflow-y-auto bg-slate-900 p-4 md:p-8 space-y-6">
+
+        <!-- HEADER SUPERIOR CON BOTÓN HAMBURGUESA, BARRA DE BÚSQUEDA Y ESTADO SINCRO -->
+        <div class="flex justify-between items-center bg-slate-950 p-4 rounded-xl border border-slate-800 mb-2 gap-3">
+            <div class="flex items-center space-x-3 flex-1">
+                <button id="sidebar-toggle" onclick="toggleSidebar()"
+                    class="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition flex items-center justify-center focus:outline-none"
+                    title="Alternar menú lateral">
+                    <i data-lucide="menu" id="toggle-icon" class="w-5 h-5"></i>
+                </button>
+                <div class="relative w-full max-w-xs sm:max-w-sm">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-3 text-slate-400"></i>
+                    <input id="global-search" type="text" oninput="handleSearch(this.value)"
+                        placeholder="Buscar DNI, Patente, Conductor..."
+                        class="w-full bg-slate-900 text-sm text-slate-200 pl-9 pr-4 py-2 rounded-lg border border-slate-700 focus:outline-none focus:border-blue-500">
+                </div>
+            </div>
+            <div class="hidden sm:flex items-center space-x-4">
+                <div
+                    class="flex items-center space-x-2 text-xs text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>LocalStorage: <strong class="text-emerald-400">Guardado Local</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. SECCIÓN DASHBOARD -->
+        <section id="sec-dashboard" class="space-y-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-bold text-white tracking-tight">Panel Control de Operaciones</h2>
+                    <p class="text-sm text-slate-400">Resumen en tiempo real del parque motomotor y estado de cobro de
+                        la flota.</p>
+                </div>
+                <div class="flex space-x-3">
+                    <button onclick="openModal('modal-nuevo-pago')"
+                        class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center space-x-2 shadow-lg shadow-emerald-600/30 transition">
+                        <i data-lucide="wallet" class="w-4 h-4"></i>
+                        <span>Cargar Pago</span>
+                    </button>
+                    <button onclick="openModal('modal-nuevo-contrato')"
+                        class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center space-x-2 shadow-lg shadow-blue-600/30 transition">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        <span>Nuevo Contrato</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- KPIs Rápidos -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div
+                    class="bg-slate-800/80 p-5 rounded-2xl border border-slate-700/80 shadow-sm relative overflow-hidden">
+                    <div class="flex justify-between items-center text-slate-400 mb-2">
+                        <span class="text-xs font-bold tracking-wider uppercase text-slate-400">Flota Alquilada</span>
+                        <div class="p-2 bg-blue-500/10 rounded-lg text-blue-400">
+                            <i data-lucide="bike" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <p class="text-3xl font-black text-white" id="kpi-rented-units">0 <span
+                            class="text-lg font-normal text-slate-400" id="kpi-total-units">/ 0</span></p>
+                    <div class="mt-2 flex items-center space-x-2">
+                        <span class="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded-md text-xs font-semibold"
+                            id="kpi-occupation-rate">0% Ocupación</span>
+                        <span class="text-xs text-slate-400" id="kpi-available-units">0 Disponibles</span>
+                    </div>
+                </div>
+
+                <div
+                    class="bg-slate-800/80 p-5 rounded-2xl border border-slate-700/80 shadow-sm relative overflow-hidden">
+                    <div class="flex justify-between items-center text-slate-400 mb-2">
+                        <span class="text-xs font-bold tracking-wider uppercase text-slate-400">Cobranza Total</span>
+                        <div class="p-2 bg-emerald-500/10 rounded-lg text-emerald-400">
+                            <i data-lucide="dollar-sign" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <p class="text-3xl font-black text-white" id="kpi-total-revenue">$0</p>
+                    <div class="mt-2 flex items-center space-x-2">
+                        <span class="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded-md text-xs font-semibold"
+                            id="kpi-tx-count">0 pagos</span>
+                        <span class="text-xs text-slate-400">Ingresos acumulados</span>
+                    </div>
+                </div>
+
+                <div
+                    class="bg-slate-800/80 p-5 rounded-2xl border border-slate-700/80 shadow-sm relative overflow-hidden">
+                    <div class="flex justify-between items-center text-slate-400 mb-2">
+                        <span class="text-xs font-bold tracking-wider uppercase text-slate-400">Conductores en
+                            Mora</span>
+                        <div class="p-2 bg-rose-500/10 rounded-lg text-rose-400">
+                            <i data-lucide="alert-circle" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <p class="text-3xl font-black text-rose-400" id="kpi-mora-count">0</p>
+                    <div class="mt-2 flex items-center space-x-2">
+                        <span
+                            class="px-2 py-0.5 bg-rose-500/10 text-rose-400 rounded-md text-xs font-semibold">Urgente</span>
+                        <span class="text-xs text-slate-400">Seguimiento de pago</span>
+                    </div>
+                </div>
+
+                <div
+                    class="bg-slate-800/80 p-5 rounded-2xl border border-slate-700/80 shadow-sm relative overflow-hidden">
+                    <div class="flex justify-between items-center text-slate-400 mb-2">
+                        <span class="text-xs font-bold tracking-wider uppercase text-slate-400">Services
+                            Pendientes</span>
+                        <div class="p-2 bg-amber-500/10 rounded-lg text-amber-400">
+                            <i data-lucide="wrench" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <p class="text-3xl font-black text-amber-400" id="kpi-service-count">0 Motos</p>
+                    <div class="mt-2 flex items-center space-x-2">
+                        <span class="px-2 py-0.5 bg-amber-500/10 text-amber-400 rounded-md text-xs font-semibold">Por
+                            Kilometraje</span>
+                        <span class="text-xs text-slate-400">> 10.000 km</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grilla Principal del Dashboard -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Tabla Resumen Transacciones -->
+                <div class="lg:col-span-2 bg-slate-800/60 rounded-2xl border border-slate-700/80 p-5">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h3 class="font-bold text-base text-white">Últimas Transacciones Registradas</h3>
+                            <p class="text-xs text-slate-400">Entradas de fondos por alquiler / opción de compra</p>
+                        </div>
+                        <button onclick="switchTab('transactions')"
+                            class="text-xs text-blue-400 hover:underline font-medium">Ver todas</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-slate-300">
+                            <thead class="bg-slate-900/60 text-slate-400 uppercase text-[11px] tracking-wider">
+                                <tr>
+                                    <th class="p-3 rounded-l-lg">Conductor</th>
+                                    <th class="p-3">Vehículo</th>
+                                    <th class="p-3">Monto</th>
+                                    <th class="p-3">Medio</th>
+                                    <th class="p-3 rounded-r-lg">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dashboard-recent-txs" class="divide-y divide-slate-800/60">
+                                <!-- Dynamic dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Panel Lateral Derecha: Alertas Operativas -->
+                <div class="bg-slate-800/60 rounded-2xl border border-slate-700/80 p-5 space-y-4">
+                    <h3 class="font-bold text-base text-white flex items-center justify-between">
+                        <span>Alertas Operativas</span>
+                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                    </h3>
+                    <div id="dashboard-alerts-list" class="space-y-3">
+                        <!-- Dynamic alerts -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. SECCIÓN CONDUCTORES -->
+        <section id="sec-drivers" class="hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-bold text-white tracking-tight">Gestión de Conductores (Drivers)</h2>
+                    <p class="text-sm text-slate-400">Validación de identidad, licencias, Scoring interno y estado
+                        operativo.</p>
+                </div>
+                <button onclick="openModal('modal-nuevo-conductor')"
+                    class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center space-x-2 shadow-lg shadow-blue-600/30 transition">
+                    <i data-lucide="user-plus" class="w-4 h-4"></i>
+                    <span>Registrar Conductor</span>
+                </button>
+            </div>
+
+            <!-- Tabla Conductores -->
+            <div class="bg-slate-800/60 rounded-2xl border border-slate-700/80 p-5">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xs text-slate-400">Filtrar por:</span>
+                        <select id="filter-driver-status" onchange="renderDrivers()"
+                            class="bg-slate-900 border border-slate-700 text-xs text-slate-200 rounded-lg px-3 py-1.5 focus:outline-none">
+                            <option value="ALL">Todos los estados</option>
+                            <option value="Activo">Activos</option>
+                            <option value="En Mora">En Mora</option>
+                            <option value="Inactivo">Inactivos</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="bg-slate-900/60 text-slate-400 uppercase text-[11px] tracking-wider">
+                            <tr>
+                                <th class="p-3 rounded-l-lg">Conductor</th>
+                                <th class="p-3">DNI / CUIT</th>
+                                <th class="p-3">Venc. Licencia</th>
+                                <th class="p-3">Scoring Interno</th>
+                                <th class="p-3">Estado</th>
+                                <th class="p-3 rounded-r-lg text-right">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="drivers-table-body" class="divide-y divide-slate-800/60">
+                            <!-- Dynamic drivers -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. SECCIÓN VEHÍCULOS (FLOTA) -->
+        <section id="sec-units" class="hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-bold text-white tracking-tight">Parque Motomotor (Flota)</h2>
+                    <p class="text-sm text-slate-400">Monitoreo de unidades, kilometraje actual, GPS y estado físico.
+                    </p>
+                </div>
+                <button onclick="openModal('modal-nueva-unidad')"
+                    class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center space-x-2 shadow-lg shadow-blue-600/30 transition">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Agregar Unidad</span>
+                </button>
+            </div>
+
+            <!-- Grilla de Tarjetas de Vehículos -->
+            <div id="units-cards-grid" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <!-- Dynamic unit cards -->
+            </div>
+        </section>
+
+        <!-- 4. SECCIÓN CONTRATOS -->
+        <section id="sec-contracts" class="hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-bold text-white tracking-tight">Contratos Rent-to-Own</h2>
+                    <p class="text-sm text-slate-400">Definición de reglas de alquiler con opción a compra, anticipo y
+                        cuota semanal.</p>
+                </div>
+                <button onclick="openModal('modal-nuevo-contrato')"
+                    class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center space-x-2 shadow-lg shadow-blue-600/30 transition">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Nuevo Contrato</span>
+                </button>
+            </div>
+
+            <div class="bg-slate-800/60 rounded-2xl border border-slate-700/80 p-5">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="bg-slate-900/60 text-slate-400 uppercase text-[11px] tracking-wider">
+                            <tr>
+                                <th class="p-3 rounded-l-lg">ID Contrato</th>
+                                <th class="p-3">Conductor</th>
+                                <th class="p-3">Moto</th>
+                                <th class="p-3">Anticipo</th>
+                                <th class="p-3">Cuota Semanal</th>
+                                <th class="p-3">Avance Cuotas</th>
+                                <th class="p-3 rounded-r-lg text-right">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contracts-table-body" class="divide-y divide-slate-800/60">
+                            <!-- Dynamic contracts -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. SECCIÓN TRANSACCIONES -->
+        <section id="sec-transactions" class="hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-bold text-white tracking-tight">Registro de Transacciones</h2>
+                    <p class="text-sm text-slate-400">Historial completo de pagos recibidos, transferencias y cuotas
+                        semanales.</p>
+                </div>
+                <button onclick="openModal('modal-nuevo-pago')"
+                    class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center space-x-2 shadow-lg shadow-emerald-600/30 transition">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                    <span>Cargar Pago Manual</span>
+                </button>
+            </div>
+            <div class="bg-slate-800/60 rounded-2xl border border-slate-700/80 p-5">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="bg-slate-900/60 text-slate-400 uppercase text-[11px] tracking-wider">
+                            <tr>
+                                <th class="p-3 rounded-l-lg">ID Transacción</th>
+                                <th class="p-3">Contrato</th>
+                                <th class="p-3">Conductor</th>
+                                <th class="p-3">Fecha</th>
+                                <th class="p-3">Monto</th>
+                                <th class="p-3">Canal</th>
+                                <th class="p-3 rounded-r-lg">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactions-table-body" class="divide-y divide-slate-800/60">
+                            <!-- Dynamic transactions -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. SECCIÓN MANTENIMIENTO -->
+        <section id="sec-maintenance" class="hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-bold text-white tracking-tight">Control de Mantenimiento Preventivo</h2>
+                    <p class="text-sm text-slate-400">Monitoreo de kilometraje y protección del capital operativo.</p>
+                </div>
+            </div>
+            <div id="maintenance-cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Dynamic maintenance cards -->
+            </div>
+        </section>
+
+        <!-- 7. SECCIÓN INCIDENCIAS -->
+        <section id="sec-incidents" class="hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-bold text-white tracking-tight">Gestión de Incidencias y Bloqueos GPS</h2>
+                    <p class="text-sm text-slate-400">Multas, siniestros, asistencia mecánica o corte de motor remoto.
+                    </p>
+                </div>
+                <button onclick="openModal('modal-nueva-incidencia')"
+                    class="bg-rose-600 hover:bg-rose-500 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center space-x-2 shadow-lg shadow-rose-600/30 transition">
+                    <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                    <span>Registrar Incidencia</span>
+                </button>
+            </div>
+            <div class="bg-slate-800/60 rounded-2xl border border-slate-700/80 p-5 space-y-4">
+                <div id="incidents-list-container" class="divide-y divide-slate-700/60">
+                    <!-- Dynamic incidents -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- 1. MODAL: REGISTRAR CONDUCTOR -->
+    <div id="modal-nuevo-conductor"
+        class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-2xl p-6 space-y-5 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                    <i data-lucide="user-plus" class="w-5 h-5 text-blue-500"></i>
+                    <span>Registrar Nuevo Conductor</span>
+                </h3>
+                <button onclick="closeModal('modal-nuevo-conductor')" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="form-nuevo-conductor" class="space-y-4" onsubmit="handleCreateDriver(event)">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Nombre Completo</label>
+                    <input type="text" id="driver-name" required placeholder="Ej. Carlos Rodríguez"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">DNI / CUIT</label>
+                        <input type="text" id="driver-dni" required placeholder="39.888.777"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Teléfono (WhatsApp)</label>
+                        <input type="text" id="driver-phone" required placeholder="+54 11 5566-7788"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Vencimiento Licencia</label>
+                        <input type="date" id="driver-license" required
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Scoring Inicial (1.0 -
+                            10.0)</label>
+                        <input type="number" step="0.1" min="1" max="10" value="8.5" id="driver-scoring" required
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+                <div class="pt-3 flex justify-end space-x-3">
+                    <button type="button" onclick="closeModal('modal-nuevo-conductor')"
+                        class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold hover:bg-slate-700">Cancelar</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-500">Guardar
+                        Conductor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. MODAL: AGREGAR UNIDAD (MOTO) -->
+    <div id="modal-nueva-unidad"
+        class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-2xl p-6 space-y-5 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                    <i data-lucide="bike" class="w-5 h-5 text-blue-500"></i>
+                    <span>Agregar Nueva Moto a la Flota</span>
+                </h3>
+                <button onclick="closeModal('modal-nueva-unidad')" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="form-nueva-unidad" class="space-y-4" onsubmit="handleCreateUnit(event)">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Marca / Modelo / Año</label>
+                        <input type="text" id="unit-model" required placeholder="Ej. Honda Wave 110 (2025)"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Patente / Dominio</label>
+                        <input type="text" id="unit-plate" required placeholder="A123XYZ"
+                            class="w-full bg-slate-950 border border-slate-800 uppercase rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Número de Chasis</label>
+                        <input type="text" id="unit-chassis" required placeholder="CH882193812"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Kilometraje Inicial</label>
+                        <input type="number" id="unit-km" required value="0"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Dispositivo GPS ID</label>
+                        <input type="text" id="unit-gps" required placeholder="GPS-1092"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Depósito / Base</label>
+                        <input type="text" id="unit-location" required placeholder="Ej. Base Haedo / Taller"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Estado Inicial</label>
+                    <select id="unit-status"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                        <option value="Disponible">Disponible</option>
+                        <option value="En Taller">En Taller</option>
+                    </select>
+                </div>
+                <div class="pt-3 flex justify-end space-x-3">
+                    <button type="button" onclick="closeModal('modal-nueva-unidad')"
+                        class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold hover:bg-slate-700">Cancelar</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-500">Guardar
+                        Moto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. MODAL: REGISTRAR INCIDENCIA -->
+    <div id="modal-nueva-incidencia"
+        class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-2xl p-6 space-y-5 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                    <i data-lucide="shield-alert" class="w-5 h-5 text-rose-500"></i>
+                    <span>Registrar Incidencia / Alerta</span>
+                </h3>
+                <button onclick="closeModal('modal-nueva-incidencia')" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="form-nueva-incidencia" class="space-y-4" onsubmit="handleCreateIncident(event)">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Seleccionar Moto /
+                            Patente</label>
+                        <select id="incident-unit" required
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                            <!-- Dynamic options -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Tipo de Incidencia</label>
+                        <select id="incident-type" required
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                            <option value="Mora Excesiva">Mora Excesiva (>7 días)</option>
+                            <option value="Avería Mecánica">Avería Mecánica</option>
+                            <option value="Multa de Tránsito">Multa de Tránsito</option>
+                            <option value="Siniestro / Choque">Siniestro / Choque</option>
+                            <option value="Intento de Desconexión GPS">Intento de Desconexión GPS</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Descripción del Suceso</label>
+                    <textarea id="incident-desc" required rows="3"
+                        placeholder="Detalle la situación o motivo de la alerta..."
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Nivel de Gravedad</label>
+                    <select id="incident-severity"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                        <option value="Alta">Alta (Requiere Bloqueo / Taller Inmediato)</option>
+                        <option value="Media">Media (Aviso / Notificación)</option>
+                        <option value="Baja">Baja (Informativo)</option>
+                    </select>
+                </div>
+                <div class="pt-3 flex justify-end space-x-3">
+                    <button type="button" onclick="closeModal('modal-nueva-incidencia')"
+                        class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold hover:bg-slate-700">Cancelar</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-rose-600 text-white rounded-xl text-xs font-semibold hover:bg-rose-500">Registrar
+                        Incidencia</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4. MODAL: NUEVO CONTRATO -->
+    <div id="modal-nuevo-contrato"
+        class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-2xl p-6 space-y-5 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                    <i data-lucide="file-plus" class="w-5 h-5 text-blue-500"></i>
+                    <span>Crear Nuevo Contrato Rent-to-Own</span>
+                </h3>
+                <button onclick="closeModal('modal-nuevo-contrato')" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="form-nuevo-contrato" class="space-y-4" onsubmit="handleCreateContract(event)">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Seleccionar Conductor</label>
+                    <select id="contract-driver-select" required
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                        <!-- Dynamic options -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Seleccionar Moto Disponible</label>
+                    <select id="contract-unit-select" required
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                        <!-- Dynamic options -->
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Anticipo ($)</label>
+                        <input type="number" id="contract-downpayment" value="100000" required
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Cuota Semanal ($)</label>
+                        <input type="number" id="contract-weekly" value="25000" required
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Duración (Semanas para Opción a
+                        Compra)</label>
+                    <input type="number" id="contract-weeks" value="52" min="12" max="104" required
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="pt-3 flex justify-end space-x-3">
+                    <button type="button" onclick="closeModal('modal-nuevo-contrato')"
+                        class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold hover:bg-slate-700">Cancelar</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-500">Guardar
+                        Contrato</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 5. MODAL: CARGAR PAGO / TRANSACCIÓN -->
+    <div id="modal-nuevo-pago"
+        class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-2xl p-6 space-y-5 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                    <i data-lucide="wallet" class="w-5 h-5 text-emerald-500"></i>
+                    <span>Cargar Pago Manual de Cuota</span>
+                </h3>
+                <button onclick="closeModal('modal-nuevo-pago')" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="form-nuevo-pago" class="space-y-4" onsubmit="handleCreateTransaction(event)">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Seleccionar Contrato Activo</label>
+                    <select id="payment-contract-select" required
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                        <!-- Dynamic contracts options -->
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Monto del Pago ($)</label>
+                        <input type="number" id="payment-amount" value="25000" required
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Canal de Pago</label>
+                        <select id="payment-channel"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                            <option value="Mercado Pago">Mercado Pago</option>
+                            <option value="Transferencia Bancaria">Transferencia Bancaria</option>
+                            <option value="Efectivo en Base">Efectivo en Base</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="pt-3 flex justify-end space-x-3">
+                    <button type="button" onclick="closeModal('modal-nuevo-pago')"
+                        class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold hover:bg-slate-700">Cancelar</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-semibold hover:bg-emerald-500">Registrar
+                        Pago</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- JS PARA PERSISTENCIA CON LOCALSTORAGE Y MANEJO DE VISTAS -->
+    <script>
+        const STORAGE_KEY = 'motocontrol_360_data';
+
+        // Estructura de Datos Inicial de Ejemplo
+        const DEFAULT_DB = {
+            drivers: [
+                { id: 'DRV-1001', name: 'Gonzalo Pérez', dni: '38.452.119', phone: '+54 11 4455-8822', licenseExp: '2027-05-12', scoring: 9.2, status: 'Activo' },
+                { id: 'DRV-1002', name: 'Lucas Fernández', dni: '40.112.983', phone: '+54 11 6622-1144', licenseExp: '2026-11-20', scoring: 6.5, status: 'En Mora' },
+                { id: 'DRV-1003', name: 'Mariano Gómez', dni: '36.883.102', phone: '+54 11 3322-9900', licenseExp: '2028-01-15', scoring: 8.8, status: 'Activo' }
+            ],
+            units: [
+                { id: 'UNT-101', model: 'Honda Wave 110 S', plate: 'A123XYZ', chassis: 'CH99812451', km: 10450, gps: 'GPS-8821 (Online)', location: 'Haedo Center', status: 'Alquilado', driverId: 'DRV-1001' },
+                { id: 'UNT-102', model: 'Motomel Sirius 150', plate: 'A456ABC', chassis: 'CH33418820', km: 8200, gps: 'GPS-3312 (Online)', location: 'Morón Base', status: 'Alquilado', driverId: 'DRV-1002' },
+                { id: 'UNT-103', model: 'Yamaha YBR 125', plate: 'A789DEF', chassis: 'CH77621004', km: 3100, gps: 'GPS-9901 (Online)', location: 'Taller Central', status: 'Disponible', driverId: null }
+            ],
+            contracts: [
+                { id: '#CTR-2026-001', driverId: 'DRV-1001', unitId: 'UNT-101', downPayment: 120000, weeklyFee: 28000, currentWeek: 18, totalWeeks: 52, status: 'Al Día' },
+                { id: '#CTR-2026-002', driverId: 'DRV-1002', unitId: 'UNT-102', downPayment: 100000, weeklyFee: 25000, currentWeek: 12, totalWeeks: 48, status: 'En Mora' }
+            ],
+            transactions: [
+                { id: 'TX-891203', contractId: '#CTR-2026-001', driverName: 'Gonzalo Pérez', plate: 'A123XYZ', date: '04/09/2026 - 14:20 HS', amount: 28000, channel: 'Mercado Pago', status: 'Aprobado' },
+                { id: 'TX-891202', contractId: '#CTR-2026-001', driverName: 'Gonzalo Pérez', plate: 'A123XYZ', date: '28/08/2026 - 11:15 HS', amount: 28000, channel: 'Mercado Pago', status: 'Aprobado' }
+            ],
+            incidents: [
+                { id: 'INC-401', unitPlate: 'A456ABC', driverName: 'Lucas Fernández', type: 'Mora Excesiva', description: 'Atraso en la cuota semanal por más de 8 días.', severity: 'Alta', status: 'Pendiente', gpsLocked: false }
+            ]
+        };
+
+        let DB = JSON.parse(JSON.stringify(DEFAULT_DB));
+
+        function loadDB() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (stored) {
+                    DB = JSON.parse(stored);
+                } else {
+                    DB = JSON.parse(JSON.stringify(DEFAULT_DB));
+                    saveDB();
+                }
+            } catch (e) {
+                console.error("Error al cargar localStorage, usando datos por defecto:", e);
+                DB = JSON.parse(JSON.stringify(DEFAULT_DB));
+            }
+        }
+
+        function saveDB() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(DB));
+            } catch (e) {
+                console.error("Error al guardar en localStorage:", e);
+            }
+            renderAll();
+        }
+
+        function resetDataToDemo() {
+            DB = JSON.parse(JSON.stringify(DEFAULT_DB));
+            saveDB();
+            showToast('Datos reestablecidos a valores por defecto.', 'info');
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const bgClass = type === 'error' ? 'bg-rose-600' : type === 'info' ? 'bg-blue-600' : 'bg-emerald-600';
+            const iconName = type === 'error' ? 'alert-circle' : type === 'info' ? 'info' : 'check-circle-2';
+
+            const toast = document.createElement('div');
+            toast.className = `${bgClass} text-white px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 text-xs font-semibold toast-animate pointer-events-auto min-w-[240px] justify-between border border-white/20`;
+            toast.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="${iconName}" class="w-4 h-4 shrink-0"></i>
+                    <span>${message}</span>
+                </div>
+                <button onclick="this.parentElement.remove()" class="text-white/80 hover:text-white ml-3">
+                    <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                </button>
+            `;
+
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        let isSidebarOpenMobile = false;
+        let isSidebarCollapsedDesktop = false;
+
+        function toggleSidebar(forceState) {
+            const sidebar = document.getElementById('main-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const toggleIcon = document.getElementById('toggle-icon');
+            const isMobile = window.innerWidth < 768;
+
+            if (isMobile) {
+                isSidebarOpenMobile = forceState !== undefined ? forceState : !isSidebarOpenMobile;
+
+                if (isSidebarOpenMobile) {
+                    sidebar.classList.remove('-translate-x-full');
+                    overlay.classList.remove('hidden', 'pointer-events-none');
+                    setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+                } else {
+                    sidebar.classList.add('-translate-x-full');
+                    overlay.classList.add('opacity-0');
+                    setTimeout(() => {
+                        if (!isSidebarOpenMobile) {
+                            overlay.classList.add('hidden', 'pointer-events-none');
+                        }
+                    }, 300);
+                }
+            } else {
+                isSidebarCollapsedDesktop = forceState !== undefined ? !forceState : !isSidebarCollapsedDesktop;
+                const textElements = sidebar.querySelectorAll('.sidebar-text');
+
+                if (isSidebarCollapsedDesktop) {
+                    sidebar.classList.remove('w-64');
+                    sidebar.classList.add('w-20');
+                    textElements.forEach(el => el.classList.add('hidden'));
+                } else {
+                    sidebar.classList.remove('w-20');
+                    sidebar.classList.add('w-64');
+                    textElements.forEach(el => el.classList.remove('hidden'));
+                }
+            }
+
+            if (toggleIcon) {
+                const isOpen = isMobile ? isSidebarOpenMobile : !isSidebarCollapsedDesktop;
+                toggleIcon.setAttribute('data-lucide', isOpen ? 'panel-left-close' : 'menu');
+                lucide.createIcons();
+            }
+        }
+
+        // Switch entre solapas/tabs
+        function switchTab(tabId) {
+            if (window.innerWidth < 768) {
+                toggleSidebar(false);
+            }
+
+            const sections = ['dashboard', 'drivers', 'units', 'contracts', 'transactions', 'maintenance', 'incidents'];
+            sections.forEach(sec => {
+                const elSec = document.getElementById(`sec-${sec}`);
+                const elNav = document.getElementById(`nav-${sec}`);
+                if (elSec) elSec.classList.add('hidden');
+                if (elNav) elNav.classList.remove('active');
+            });
+
+            const activeSec = document.getElementById(`sec-${tabId}`);
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeSec) activeSec.classList.remove('hidden');
+            if (activeNav) activeNav.classList.add('active');
+        }
+
+        function openModal(modalId) {
+            populateModalDropdowns();
+            document.getElementById(modalId).classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+
+        // RENDERIZADO GENERAL Y ACTUALIZACIÓN DE CONTADORES
+        function renderAll() {
+            // Actualizar contadores del Sidebar
+            document.getElementById('count-drivers').innerText = DB.drivers.length;
+            document.getElementById('count-units').innerText = DB.units.length;
+            document.getElementById('count-contracts').innerText = DB.contracts.length;
+            document.getElementById('count-maintenance').innerText = DB.units.filter(u => u.km >= 10000 || u.status === 'En Taller').length;
+            document.getElementById('count-incidents').innerText = DB.incidents.filter(i => i.status === 'Pendiente').length;
+
+            renderDashboard();
+            renderDrivers();
+            renderUnits();
+            renderContracts();
+            renderTransactions();
+            renderMaintenance();
+            renderIncidents();
+
+            lucide.createIcons();
+        }
+
+        // RENDER 1. DASHBOARD
+        function renderDashboard() {
+            const rentedUnits = DB.units.filter(u => u.status === 'Alquilado').length;
+            const totalUnits = DB.units.length;
+            const availableUnits = DB.units.filter(u => u.status === 'Disponible').length;
+            const occupation = totalUnits > 0 ? Math.round((rentedUnits / totalUnits) * 100) : 0;
+
+            document.getElementById('kpi-rented-units').innerHTML = `${rentedUnits} <span class="text-lg font-normal text-slate-400">/ ${totalUnits}</span>`;
+            document.getElementById('kpi-occupation-rate').innerText = `${occupation}% Ocupación`;
+            document.getElementById('kpi-available-units').innerText = `${availableUnits} Disponibles`;
+
+            const totalRev = DB.transactions.reduce((acc, t) => acc + (t.amount || 0), 0);
+            document.getElementById('kpi-total-revenue').innerText = `$${totalRev.toLocaleString('es-AR')}`;
+            document.getElementById('kpi-tx-count').innerText = `${DB.transactions.length} transacciones`;
+
+            const moraDrivers = DB.drivers.filter(d => d.status === 'En Mora').length;
+            document.getElementById('kpi-mora-count').innerText = moraDrivers;
+
+            const serviceMotos = DB.units.filter(u => u.km >= 10000).length;
+            document.getElementById('kpi-service-count').innerText = `${serviceMotos} Motos`;
+
+            // Últimas Transacciones en Dashboard
+            const recentTxsContainer = document.getElementById('dashboard-recent-txs');
+            recentTxsContainer.innerHTML = DB.transactions.slice(0, 4).map(tx => `
+                <tr>
+                    <td class="p-3 font-medium text-white">${tx.driverName}</td>
+                    <td class="p-3"><span class="font-mono text-xs bg-slate-900 px-2 py-0.5 rounded border border-slate-700">${tx.plate}</span></td>
+                    <td class="p-3 font-bold text-emerald-400">$${tx.amount.toLocaleString('es-AR')}</td>
+                    <td class="p-3 text-xs text-slate-400">${tx.channel}</td>
+                    <td class="p-3"><span class="px-2 py-1 bg-emerald-500/10 text-emerald-400 rounded-full text-xs font-semibold">${tx.status}</span></td>
+                </tr>
+            `).join('') || `<tr><td colspan="5" class="p-4 text-center text-xs text-slate-500">Sin transacciones registradas</td></tr>`;
+
+            // Alertas Operativas en Dashboard
+            const alertsList = document.getElementById('dashboard-alerts-list');
+            let alertsHtml = '';
+
+            DB.incidents.filter(i => i.status === 'Pendiente').forEach(inc => {
+                alertsHtml += `
+                    <div class="p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-start space-x-3">
+                        <i data-lucide="alert-triangle" class="w-5 h-5 text-rose-400 shrink-0 mt-0.5"></i>
+                        <div>
+                            <p class="text-xs font-bold text-rose-300">${inc.type}</p>
+                            <p class="text-[11px] text-rose-200/70 mt-0.5">Moto Patente <strong class="text-white font-mono">${inc.unitPlate}</strong> - ${inc.driverName}</p>
+                            <button onclick="switchTab('incidents')" class="text-[11px] text-rose-400 underline font-semibold mt-1">Ver acción GPS / Resolver</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            DB.units.filter(u => u.km >= 10000).forEach(u => {
+                alertsHtml += `
+                    <div class="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-start space-x-3">
+                        <i data-lucide="wrench" class="w-5 h-5 text-amber-400 shrink-0 mt-0.5"></i>
+                        <div>
+                            <p class="text-xs font-bold text-amber-300">Mantenimiento Preventivo Requerido</p>
+                            <p class="text-[11px] text-amber-200/70 mt-0.5">${u.model} (${u.plate}) superó los <strong class="text-white font-mono">${u.km.toLocaleString()} KM</strong>.</p>
+                            <button onclick="switchTab('maintenance')" class="text-[11px] text-amber-400 underline font-semibold mt-1">Revisar estado de servicio</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            alertsList.innerHTML = alertsHtml || `<p class="text-xs text-slate-500 p-2 text-center">No hay alertas urgentes pendientes.</p>`;
+        }
+
+        // RENDER 2. CONDUCTORES
+        function renderDrivers() {
+            const filter = document.getElementById('filter-driver-status').value;
+            const container = document.getElementById('drivers-table-body');
+
+            const filtered = DB.drivers.filter(d => filter === 'ALL' || d.status === filter);
+
+            container.innerHTML = filtered.map(d => {
+                const statusBadge = d.status === 'Activo' ? 'bg-emerald-500/10 text-emerald-400' :
+                    d.status === 'En Mora' ? 'bg-rose-500/10 text-rose-400' : 'bg-slate-700 text-slate-300';
+
+                return `
+                    <tr>
+                        <td class="p-3 font-medium text-white flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-xs text-blue-400">
+                                ${d.name.split(' ').map(n => n[0]).join('')}
+                            </div>
+                            <div>
+                                <p class="font-bold text-white">${d.name}</p>
+                                <p class="text-[11px] text-slate-400">${d.phone}</p>
+                            </div>
+                        </td>
+                        <td class="p-3 font-mono text-xs text-slate-300">${d.dni}</td>
+                        <td class="p-3 text-xs font-medium text-slate-300">${d.licenseExp}</td>
+                        <td class="p-3">
+                            <div class="flex items-center space-x-1">
+                                <i data-lucide="star" class="w-3.5 h-3.5 text-amber-400 fill-amber-400"></i>
+                                <span class="text-xs font-bold text-white">${d.scoring}</span>
+                                <span class="text-[10px] text-slate-500">/ 10</span>
+                            </div>
+                        </td>
+                        <td class="p-3"><span class="px-2.5 py-1 ${statusBadge} rounded-full text-xs font-semibold">${d.status}</span></td>
+                        <td class="p-3 text-right space-x-2">
+                            <button onclick="toggleDriverStatus('${d.id}')" class="px-2.5 py-1 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg text-xs font-medium transition">Cambiar Estado</button>
+                            <button onclick="deleteDriver('${d.id}')" class="px-2.5 py-1 bg-rose-950/40 hover:bg-rose-900 text-rose-400 rounded-lg text-xs font-medium transition">Eliminar</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('') || `<tr><td colspan="6" class="p-4 text-center text-xs text-slate-500">No hay conductores registrados</td></tr>`;
+        }
+
+        // RENDER 3. UNIDADES (FLOTA)
+        function renderUnits() {
+            const container = document.getElementById('units-cards-grid');
+
+            container.innerHTML = DB.units.map(u => {
+                const driver = DB.drivers.find(d => d.id === u.driverId);
+                const statusBadge = u.status === 'Alquilado' ? 'bg-emerald-500/10 text-emerald-400' :
+                    u.status === 'En Taller' ? 'bg-amber-500/10 text-amber-400' : 'bg-blue-500/10 text-blue-400';
+
+                return `
+                    <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 space-y-4 hover:border-slate-600 transition flex flex-col justify-between">
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="text-xs font-semibold text-blue-400 uppercase tracking-wider">${u.model}</span>
+                                    <h3 class="text-xl font-mono font-bold text-white mt-0.5">Patente: ${u.plate}</h3>
+                                </div>
+                                <span class="px-2.5 py-1 ${statusBadge} rounded-full text-xs font-semibold">${u.status}</span>
+                            </div>
+                            <div class="p-3 bg-slate-900/80 rounded-xl space-y-2 text-xs">
+                                <div class="flex justify-between text-slate-300">
+                                    <span class="text-slate-500">Chasis:</span>
+                                    <span class="font-mono">${u.chassis}</span>
+                                </div>
+                                <div class="flex justify-between text-slate-300">
+                                    <span class="text-slate-500">Kilometraje:</span>
+                                    <span class="font-bold ${u.km >= 10000 ? 'text-amber-400' : 'text-slate-200'}">${u.km.toLocaleString()} km</span>
+                                </div>
+                                <div class="flex justify-between text-slate-300">
+                                    <span class="text-slate-500">GPS:</span>
+                                    <span class="text-emerald-400 font-medium flex items-center space-x-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                        <span>${u.gps}</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center text-xs pt-2 border-t border-slate-700/50">
+                            <span class="text-slate-400">Asignado: <strong class="text-white">${driver ? driver.name : 'Ninguno (Libre)'}</strong></span>
+                            <button onclick="deleteUnit('${u.id}')" class="text-rose-400 hover:text-rose-300 font-semibold">Eliminar</button>
+                        </div>
+                    </div>
+                `;
+            }).join('') || `<div class="col-span-3 p-8 text-center text-slate-500">No hay unidades en la flota.</div>`;
+        }
+
+        // RENDER 4. CONTRATOS
+        function renderContracts() {
+            const container = document.getElementById('contracts-table-body');
+
+            container.innerHTML = DB.contracts.map(c => {
+                const driver = DB.drivers.find(d => d.id === c.driverId);
+                const unit = DB.units.find(u => u.id === c.unitId);
+                const progress = Math.round((c.currentWeek / c.totalWeeks) * 100);
+                const isMora = c.status === 'En Mora';
+
+                return `
+                    <tr>
+                        <td class="p-3 font-mono text-xs text-blue-400">${c.id}</td>
+                        <td class="p-3 font-medium text-white">${driver ? driver.name : 'N/A'}</td>
+                        <td class="p-3"><span class="font-mono text-xs bg-slate-900 px-2 py-0.5 rounded border border-slate-700">${unit ? unit.plate : 'N/A'}</span></td>
+                        <td class="p-3">$${c.downPayment.toLocaleString('es-AR')}</td>
+                        <td class="p-3 font-bold text-emerald-400">$${c.weeklyFee.toLocaleString('es-AR')} /sem</td>
+                        <td class="p-3">
+                            <div class="w-32">
+                                <div class="flex justify-between text-[10px] mb-1 text-slate-400">
+                                    <span>${c.currentWeek} / ${c.totalWeeks} semanas</span>
+                                    <span>${progress}%</span>
+                                </div>
+                                <div class="w-full bg-slate-700 h-1.5 rounded-full overflow-hidden">
+                                    <div class="${isMora ? 'bg-rose-500' : 'bg-blue-500'} h-full" style="width: ${progress}%"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="p-3 text-right">
+                            <button onclick="deleteContract('${c.id}')" class="text-xs text-rose-400 hover:underline">Eliminar</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('') || `<tr><td colspan="7" class="p-4 text-center text-xs text-slate-500">No hay contratos activos registrados.</td></tr>`;
+        }
+
+        // RENDER 5. TRANSACCIONES
+        function renderTransactions() {
+            const container = document.getElementById('transactions-table-body');
+            container.innerHTML = DB.transactions.map(tx => `
+                <tr>
+                    <td class="p-3 font-mono text-xs text-slate-400">${tx.id}</td>
+                    <td class="p-3 font-mono text-xs text-blue-400">${tx.contractId}</td>
+                    <td class="p-3 font-medium text-white">${tx.driverName}</td>
+                    <td class="p-3 text-xs text-slate-300">${tx.date}</td>
+                    <td class="p-3 font-bold text-emerald-400">$${tx.amount.toLocaleString('es-AR')}</td>
+                    <td class="p-3 text-xs text-slate-400">${tx.channel}</td>
+                    <td class="p-3"><span class="px-2 py-1 bg-emerald-500/10 text-emerald-400 rounded-full text-xs font-semibold">${tx.status}</span></td>
+                </tr>
+            `).join('') || `<tr><td colspan="7" class="p-4 text-center text-xs text-slate-500">No hay pagos registrados.</td></tr>`;
+        }
+
+        // RENDER 6. MANTENIMIENTO
+        function renderMaintenance() {
+            const container = document.getElementById('maintenance-cards-container');
+            const maintenanceUnits = DB.units.filter(u => u.km >= 10000 || u.status === 'En Taller');
+
+            container.innerHTML = maintenanceUnits.map(u => `
+                <div class="bg-slate-800/60 p-5 rounded-2xl border border-slate-700/80 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-white">${u.model}</h4>
+                        <span class="px-2 py-0.5 ${u.status === 'En Taller' ? 'bg-amber-500/10 text-amber-400' : 'bg-rose-500/10 text-rose-400'} rounded text-xs font-bold">
+                            ${u.status === 'En Taller' ? 'En Servicio Taller' : 'Km Preventivo Alcanzado'}
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-400">Patente: <strong class="text-white font-mono">${u.plate}</strong> | Chasis: <strong class="text-slate-300 font-mono">${u.chassis}</strong></p>
+                    <p class="text-xs text-slate-400">Kilometraje Registrado: <strong class="text-amber-400 font-mono">${u.km.toLocaleString()} KM</strong></p>
+                    <div class="pt-2 flex space-x-2">
+                        <button onclick="completeMaintenance('${u.id}')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-semibold">
+                            Marcar Service Realizado (-10.000 km sim)
+                        </button>
+                    </div>
+                </div>
+            `).join('') || `<div class="col-span-2 p-8 text-center text-slate-500 bg-slate-800/40 rounded-2xl border border-slate-800">Toda la flota se encuentra al día con los mantenimientos preventivos.</div>`;
+        }
+
+        // RENDER 7. INCIDENCIAS
+        function renderIncidents() {
+            const container = document.getElementById('incidents-list-container');
+            container.innerHTML = DB.incidents.map(inc => `
+                <div class="py-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs font-bold ${inc.severity === 'Alta' ? 'text-rose-400' : 'text-amber-400'} uppercase">${inc.type}</span>
+                            <span class="text-xs px-2 py-0.5 rounded ${inc.status === 'Pendiente' ? 'bg-amber-500/10 text-amber-400' : 'bg-emerald-500/10 text-emerald-400'} font-semibold">${inc.status}</span>
+                        </div>
+                        <h4 class="text-base font-bold text-white mt-1">Moto ${inc.unitPlate} - Conductor: ${inc.driverName}</h4>
+                        <p class="text-xs text-slate-400 mt-1">${inc.description}</p>
+                    </div>
+                    <div class="flex items-center space-x-2 shrink-0">
+                        ${inc.gpsLocked ?
+                    `<button onclick="toggleGpsLock('${inc.id}', false)" class="px-3 py-1.5 bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-600 hover:text-white rounded-xl text-xs font-bold transition">Reactivar Motor Remote</button>` :
+                    `<button onclick="toggleGpsLock('${inc.id}', true)" class="px-3 py-1.5 bg-rose-600/20 text-rose-400 border border-rose-500/30 hover:bg-rose-600 hover:text-white rounded-xl text-xs font-bold transition">Ejecutar Corte Motor Remote</button>`
+                }
+                        ${inc.status === 'Pendiente' ?
+                    `<button onclick="resolveIncident('${inc.id}')" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-white rounded-xl text-xs font-semibold">Resolver</button>` : ''
+                }
+                    </div>
+                </div>
+            `).join('') || `<div class="p-4 text-center text-xs text-slate-500">No existen incidencias ni alertas registradas.</div>`;
+        }
+
+
+        // DROPDOWNS DINÁMICOS PARA MODALES
+        function populateModalDropdowns() {
+            // Unidades en Incidencias
+            const incUnitSelect = document.getElementById('incident-unit');
+            if (incUnitSelect) {
+                incUnitSelect.innerHTML = DB.units.map(u => {
+                    const drv = DB.drivers.find(d => d.id === u.driverId);
+                    return `<option value="${u.plate}">${u.model} - Patente: ${u.plate} (${drv ? drv.name : 'Sin conductor'})</option>`;
+                }).join('') || `<option value="">No hay motos cargadas</option>`;
+            }
+
+            // Conductores en Contratos
+            const contractDriverSelect = document.getElementById('contract-driver-select');
+            if (contractDriverSelect) {
+                contractDriverSelect.innerHTML = DB.drivers.map(d => `<option value="${d.id}">${d.name} (DNI: ${d.dni}) - ${d.status}</option>`).join('') || `<option value="">No hay conductores</option>`;
+            }
+
+            // Unidades disponibles en Contratos
+            const contractUnitSelect = document.getElementById('contract-unit-select');
+            if (contractUnitSelect) {
+                const availableUnits = DB.units.filter(u => u.status === 'Disponible' || u.status === 'Alquilado');
+                contractUnitSelect.innerHTML = availableUnits.map(u => `<option value="${u.id}">${u.model} - Patente: ${u.plate} (${u.status})</option>`).join('') || `<option value="">No hay unidades disponibles</option>`;
+            }
+
+            // Contratos para Pagos
+            const paymentContractSelect = document.getElementById('payment-contract-select');
+            if (paymentContractSelect) {
+                paymentContractSelect.innerHTML = DB.contracts.map(c => {
+                    const drv = DB.drivers.find(d => d.id === c.driverId);
+                    return `<option value="${c.id}">${c.id} - ${drv ? drv.name : 'N/A'} ($${c.weeklyFee}/sem)</option>`;
+                }).join('') || `<option value="">No hay contratos</option>`;
+            }
+        }
+
+        // HANDLERS DE FORMULARIOS
+
+        // 1. Crear Conductor
+        function handleCreateDriver(e) {
+            e.preventDefault();
+            const newDriver = {
+                id: 'DRV-' + Date.now().toString().slice(-4),
+                name: document.getElementById('driver-name').value.trim(),
+                dni: document.getElementById('driver-dni').value.trim(),
+                phone: document.getElementById('driver-phone').value.trim(),
+                licenseExp: document.getElementById('driver-license').value,
+                scoring: parseFloat(document.getElementById('driver-scoring').value) || 8.0,
+                status: 'Activo'
+            };
+
+            DB.drivers.unshift(newDriver);
+            saveDB();
+            closeModal('modal-nuevo-conductor');
+            document.getElementById('form-nuevo-conductor').reset();
+            showToast(`Conductor ${newDriver.name} registrado con éxito.`);
+        }
+
+        // 2. Crear Unidad (Moto)
+        function handleCreateUnit(e) {
+            e.preventDefault();
+            const newUnit = {
+                id: 'UNT-' + Date.now().toString().slice(-4),
+                model: document.getElementById('unit-model').value.trim(),
+                plate: document.getElementById('unit-plate').value.trim().toUpperCase(),
+                chassis: document.getElementById('unit-chassis').value.trim(),
+                km: parseInt(document.getElementById('unit-km').value) || 0,
+                gps: document.getElementById('unit-gps').value.trim() || 'GPS-GENERIC',
+                location: document.getElementById('unit-location').value.trim() || 'Base Haedo',
+                status: document.getElementById('unit-status').value,
+                driverId: null
+            };
+
+            DB.units.unshift(newUnit);
+            saveDB();
+            closeModal('modal-nueva-unidad');
+            document.getElementById('form-nueva-unidad').reset();
+            showToast(`Moto ${newUnit.plate} agregada a la flota.`);
+        }
+
+        // 3. Crear Incidencia
+        function handleCreateIncident(e) {
+            e.preventDefault();
+            const plate = document.getElementById('incident-unit').value;
+            const unit = DB.units.find(u => u.plate === plate);
+            const driver = unit ? DB.drivers.find(d => d.id === unit.driverId) : null;
+
+            const newIncident = {
+                id: 'INC-' + Date.now().toString().slice(-4),
+                unitPlate: plate,
+                driverName: driver ? driver.name : 'No Asignado',
+                type: document.getElementById('incident-type').value,
+                description: document.getElementById('incident-desc').value.trim(),
+                severity: document.getElementById('incident-severity').value,
+                status: 'Pendiente',
+                gpsLocked: false
+            };
+
+            DB.incidents.unshift(newIncident);
+            saveDB();
+            closeModal('modal-nueva-incidencia');
+            document.getElementById('form-nueva-incidencia').reset();
+            showToast('Incidencia registrada correctamente.', 'info');
+        }
+
+        // 4. Crear Contrato
+        function handleCreateContract(e) {
+            e.preventDefault();
+            const driverId = document.getElementById('contract-driver-select').value;
+            const unitId = document.getElementById('contract-unit-select').value;
+
+            if (!driverId || !unitId) {
+                showToast('Debe seleccionar un conductor y una moto válida.', 'error');
+                return;
+            }
+
+            const newContract = {
+                id: '#CTR-' + new Date().getFullYear() + '-' + (DB.contracts.length + 1).toString().padStart(3, '0'),
+                driverId: driverId,
+                unitId: unitId,
+                downPayment: parseFloat(document.getElementById('contract-downpayment').value) || 0,
+                weeklyFee: parseFloat(document.getElementById('contract-weekly').value) || 0,
+                currentWeek: 1,
+                totalWeeks: parseInt(document.getElementById('contract-weeks').value) || 52,
+                status: 'Al Día'
+            };
+
+            // Marcar unidad como Alquilada y asociarla al conductor
+            const unit = DB.units.find(u => u.id === unitId);
+            if (unit) {
+                unit.status = 'Alquilado';
+                unit.driverId = driverId;
+            }
+
+            DB.contracts.unshift(newContract);
+            saveDB();
+            closeModal('modal-nuevo-contrato');
+            document.getElementById('form-nuevo-contrato').reset();
+            showToast(`Contrato ${newContract.id} generado exitosamente.`);
+        }
+
+        // 5. Cargar Pago / Transacción
+        function handleCreateTransaction(e) {
+            e.preventDefault();
+            const contractId = document.getElementById('payment-contract-select').value;
+            const contract = DB.contracts.find(c => c.id === contractId);
+
+            if (!contract) {
+                showToast('Seleccione un contrato válido.', 'error');
+                return;
+            }
+
+            const driver = DB.drivers.find(d => d.id === contract.driverId);
+            const unit = DB.units.find(u => u.id === contract.unitId);
+            const amount = parseFloat(document.getElementById('payment-amount').value) || 0;
+
+            const now = new Date();
+            const formattedDate = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()} - ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} HS`;
+
+            const newTx = {
+                id: 'TX-' + Math.floor(100000 + Math.random() * 900000),
+                contractId: contract.id,
+                driverName: driver ? driver.name : 'N/A',
+                plate: unit ? unit.plate : 'N/A',
+                date: formattedDate,
+                amount: amount,
+                channel: document.getElementById('payment-channel').value,
+                status: 'Aprobado'
+            };
+
+            // Avanzar semana en contrato y normalizar estado a 'Al Día'
+            if (contract.currentWeek < contract.totalWeeks) {
+                contract.currentWeek += 1;
+            }
+            contract.status = 'Al Día';
+
+            if (driver && driver.status === 'En Mora') {
+                driver.status = 'Activo';
+            }
+
+            DB.transactions.unshift(newTx);
+            saveDB();
+            closeModal('modal-nuevo-pago');
+            document.getElementById('form-nuevo-pago').reset();
+            showToast(`Pago de $${amount.toLocaleString('es-AR')} acreditado.`);
+        }
+
+        // OTROS ACCIONES RÁPIDAS DE UI
+
+        function toggleDriverStatus(driverId) {
+            const driver = DB.drivers.find(d => d.id === driverId);
+            if (driver) {
+                const statuses = ['Activo', 'En Mora', 'Inactivo'];
+                const next = (statuses.indexOf(driver.status) + 1) % statuses.length;
+                driver.status = statuses[next];
+                saveDB();
+                showToast(`Estado de ${driver.name} actualizado a ${driver.status}`);
+            }
+        }
+
+        function deleteDriver(driverId) {
+            DB.drivers = DB.drivers.filter(d => d.id !== driverId);
+            saveDB();
+            showToast('Conductor eliminado.', 'info');
+        }
+
+        function deleteUnit(unitId) {
+            DB.units = DB.units.filter(u => u.id !== unitId);
+            saveDB();
+            showToast('Unidad eliminada del parque motomotor.', 'info');
+        }
+
+        function deleteContract(contractId) {
+            DB.contracts = DB.contracts.filter(c => c.id !== contractId);
+            saveDB();
+            showToast('Contrato eliminado.', 'info');
+        }
+
+        function completeMaintenance(unitId) {
+            const unit = DB.units.find(u => u.id === unitId);
+            if (unit) {
+                unit.km = Math.max(0, unit.km - 10000); // Resetea ciclo preventivo
+                unit.status = 'Alquilado';
+                saveDB();
+                showToast(`Service completado para la moto ${unit.plate}.`);
+            }
+        }
+
+        function toggleGpsLock(incidentId, lockState) {
+            const inc = DB.incidents.find(i => i.id === incidentId);
+            if (inc) {
+                inc.gpsLocked = lockState;
+                saveDB();
+                showToast(lockState ? `Corte de motor enviado para la moto ${inc.unitPlate}.` : `Bloqueo liberado para la moto ${inc.unitPlate}.`, lockState ? 'error' : 'success');
+            }
+        }
+
+        function resolveIncident(incidentId) {
+            const inc = DB.incidents.find(i => i.id === incidentId);
+            if (inc) {
+                inc.status = 'Resuelto';
+                saveDB();
+                showToast('Incidencia marcada como resuelta.');
+            }
+        }
+
+        // Búsqueda global básica
+        function handleSearch(query) {
+            const q = query.toLowerCase().trim();
+            if (!q) {
+                renderAll();
+                return;
+            }
+            // Filtrar vista activa o resaltar elementos si coincide
+        }
+
+        // Inicialización al cargar la ventana
+        window.onload = function () {
+            loadDB();
+            renderAll();
+
+            // Escuchar cambios de tamaño de ventana para ajustar sidebar
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 768) {
+                    const overlay = document.getElementById('sidebar-overlay');
+                    overlay.classList.add('hidden', 'pointer-events-none', 'opacity-0');
+                    isSidebarOpenMobile = false;
+                    const sidebar = document.getElementById('main-sidebar');
+                    sidebar.classList.remove('-translate-x-full');
+                }
+            });
+        };
+    </script>
+</body>
+
+</html>
