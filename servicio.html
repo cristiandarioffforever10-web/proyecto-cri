@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RENTCRI | Trabaja desde hoy y sé dueño de tu Moto 0km</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            500: '#f97316', // Vibrant Orange
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            accent: '#10b981', // Emerald Success
+                            dark: '#0b0f17',   // Deep Charcoal
+                            card: '#161e2e',   // Dark Surface
+                            border: '#2a3447'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0b0f17;
+            color: #f3f4f6;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .font-heading {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .glow-orange {
+            box-shadow: 0 0 25px -5px rgba(249, 115, 22, 0.4);
+        }
+
+        .glow-green {
+            box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.4);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #f97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-orange {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        }
+
+        /* Custom range slider styling */
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #f97316;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(249, 115, 22, 0.8);
+        }
+
+        /* Estilo para el contenedor de video */
+        .hero-video-container video {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body class="antialiased text-gray-200 bg-brand-dark selection:bg-brand-500 selection:text-white">
+
+    <!-- Top Announcement Bar (Urgencia / Escasez) -->
+    <div id="urgencyBar"
+        class="bg-gradient-to-r from-amber-600 via-brand-600 to-orange-700 text-white text-xs sm:text-sm font-semibold py-2.5 px-4 text-center flex items-center justify-center gap-2 shadow-lg sticky top-0 z-50">
+        <span class="inline-block w-2.5 h-2.5 rounded-full bg-white animate-ping"></span>
+        <span>⚡ <strong>¡Últimos cupos del mes!</strong> Quedan solo <span id="spotsLeft"
+                class="bg-black/30 px-2 py-0.5 rounded text-amber-200 font-bold">7 motos 0km</span> disponibles para
+            entrega esta semana.</span>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="border-b border-brand-border/60 bg-brand-dark/90 backdrop-blur-md sticky top-[37px] z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo (RENTCRI) -->
+            <a href="#" class="flex items-center gap-2 group">
+                <div
+                    class="w-10 h-10 rounded-xl gradient-orange flex items-center justify-center text-white font-black text-xl shadow-lg transform group-hover:scale-105 transition-transform">
+                    <i class="fa-solid fa-motorcycle"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-heading font-black text-2xl tracking-tight text-white leading-none">RENT<span
+                            class="text-brand-500">CRI</span></span>
+                    <span class="text-[10px] text-gray-400 font-medium tracking-widest uppercase">Rent To Own</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-300">
+                <a href="#como-funciona" class="hover:text-brand-500 transition-colors">Cómo Funciona</a>
+                <a href="#calculadora" class="hover:text-brand-500 transition-colors">Calculadora de Ahorro</a>
+                <a href="#motos" class="hover:text-brand-500 transition-colors">Motos 0km</a>
+                <a href="#requisitos" class="hover:text-brand-500 transition-colors">Requisitos</a>
+                <a href="#faq" class="hover:text-brand-500 transition-colors">Preguntas</a>
+            </nav>
+
+            <!-- Quick Action CTA Button -->
+            <a href="#registro"
+                class="hidden sm:inline-flex items-center gap-2 gradient-orange hover:opacity-95 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-all shadow-md hover:shadow-orange-500/20">
+                <span>Quiero mi 0km</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION WITH BACKGROUND VIDEO -->
+    <section
+        class="relative pt-8 pb-16 lg:pt-14 lg:pb-24 overflow-hidden border-b border-brand-border/40 min-h-[640px] flex items-center">
+
+        <!-- Hero Background Video Element -->
+        <div class="hero-video-container absolute inset-0 overflow-hidden pointer-events-none z-0">
+            <!-- Reemplaza "tu-video.mp4" por la ruta o URL de tu video -->
+            <video autoplay loop muted playsinline
+                poster="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1920&q=80"
+                class="w-full h-full object-cover">
+                <source src="video2.mp4" type="video/mp4">
+                <!-- Puedes agregar formatos adicionales de soporte si lo necesitas -->
+                <!-- <source src="tu-video.webm" type="video/webm"> -->
+                Tu navegador no soporta la reproducción de video en HTML5.
+            </video>
+        </div>
+
+        <!-- Dark Gradient Overlay for Maximum Readability -->
+        <div class="absolute inset-0 bg-gradient-to-r from-brand-dark via-brand-dark/90 to-brand-dark/75 z-0"></div>
+        <div class="absolute inset-0 bg-brand-dark/40 z-0"></div>
+
+        <!-- Ambient Glow Effects -->
+        <div
+            class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-brand-500/15 blur-[130px] rounded-full pointer-events-none z-0">
+        </div>
+        <div
+            class="absolute bottom-10 right-10 w-[300px] h-[300px] bg-brand-accent/15 blur-[100px] rounded-full pointer-events-none z-0">
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+
+                <!-- Left Column: Copywriting Copy -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+
+                    <!-- Pre-headline Badge -->
+                    <div
+                        class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-500/20 border border-brand-500/40 text-brand-500 text-xs sm:text-sm font-bold tracking-wide backdrop-blur-md">
+                        <i class="fa-solid fa-bolt text-amber-400"></i>
+                        <span>SIN BANCOS • SIN GARANTÍAS IMPOSIBLES • 100% PARA DELIVERIES</span>
+                    </div>
+
+                    <!-- Main Impact Headline -->
+                    <h1
+                        class="text-3xl sm:text-5xl lg:text-6xl font-black font-heading leading-tight tracking-tight text-white">
+                        Trabaja desde hoy y <span class="text-transparent bg-clip-text gradient-orange">sé dueño</span>
+                        de tu moto 0km.
+                    </h1>
+
+                    <!-- Subtitle / Value Proposition -->
+                    <p class="text-base sm:text-xl text-gray-300 font-normal leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                        Deja de tirar tu dinero en alquileres tradicionales sin futuro. Alquila una moto 0km y paga tu
+                        cuota semanal con las mismas entregas que haces en <span
+                            class="text-white font-semibold underline decoration-brand-500">Rappi, PedidosYa o
+                            Uber</span>. Al finalizar el plan, <strong class="text-white">la moto es 100% tuya.</strong>
+                    </p>
+
+                    <!-- Key Benefits List (3 Key Bullets) -->
+                    <div class="grid sm:grid-cols-3 gap-4 pt-2 text-left">
+                        <div
+                            class="bg-brand-card/85 backdrop-blur-md border border-brand-border/60 p-4 rounded-2xl flex items-start gap-3">
+                            <div
+                                class="w-9 h-9 rounded-xl bg-brand-500/20 text-brand-500 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-motorcycle text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Moto 0km Lista</h4>
+                                <p class="text-xs text-gray-400 mt-0.5">110cc a 150cc lista para salir a facturar.</p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-brand-card/85 backdrop-blur-md border border-brand-border/60 p-4 rounded-2xl flex items-start gap-3">
+                            <div
+                                class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-coins text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Cuota que se paga sola</h4>
+                                <p class="text-xs text-gray-400 mt-0.5">Consumo mínimo y cuota semanal accesible.</p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-brand-card/85 backdrop-blur-md border border-brand-border/60 p-4 rounded-2xl flex items-start gap-3">
+                            <div
+                                class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-key text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Titularidad Tuya</h4>
+                                <p class="text-xs text-gray-400 mt-0.5">Al terminar el plan la cédula va a tu nombre.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Trust indicators / Badges -->
+                    <div
+                        class="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs text-gray-400 border-t border-brand-border/40">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check text-brand-accent"></i>
+                            <span>Aprobación rápida en 24h</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved text-brand-accent"></i>
+                            <span>Seguro contra robo incluido</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-wrench text-brand-accent"></i>
+                            <span>Services programados</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Column: Lead Form Card -->
+                <div class="lg:col-span-5" id="registro">
+                    <div
+                        class="bg-brand-card/95 backdrop-blur-xl border-2 border-brand-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl relative glow-orange">
+
+                        <div
+                            class="absolute -top-4 right-6 bg-emerald-500 text-slate-950 font-black text-xs uppercase px-3 py-1 rounded-full shadow">
+                            ⚡ Pre-Aprobación Inmediata
+                        </div>
+
+                        <div class="text-center mb-6">
+                            <h3 class="text-2xl font-black font-heading text-white">¡Reserva tu Moto 0km!</h3>
+                            <p class="text-xs text-gray-400 mt-1">Completa tus datos en 30 segundos. Un asesor te
+                                contactará por WhatsApp.</p>
+                        </div>
+
+                        <form id="heroLeadForm" onsubmit="handleFormSubmit(event, 'hero')" class="space-y-4">
+
+                            <!-- Full Name -->
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1">Nombre
+                                    Completo *</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-500">
+                                        <i class="fa-solid fa-user text-sm"></i>
+                                    </span>
+                                    <input type="text" id="heroName" required placeholder="Ej. Juan Pérez"
+                                        class="w-full bg-brand-dark/80 border border-brand-border focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder-gray-500 outline-none transition-all">
+                                </div>
+                            </div>
+
+                            <!-- WhatsApp Phone -->
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1">Teléfono
+                                    / WhatsApp *</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-500">
+                                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                                    </span>
+                                    <input type="tel" id="heroPhone" required placeholder="Ej. 11 2345 6789"
+                                        class="w-full bg-brand-dark/80 border border-brand-border focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder-gray-500 outline-none transition-all">
+                                </div>
+                            </div>
+
+                            <!-- Location / Zone -->
+                            <div>
+                                <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1">Zona
+                                    o Localidad *</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-500">
+                                        <i class="fa-solid fa-location-dot text-sm"></i>
+                                    </span>
+                                    <input type="text" id="heroZone" required placeholder="Ej. CABA / Zona Norte / GBA"
+                                        class="w-full bg-brand-dark/80 border border-brand-border focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder-gray-500 outline-none transition-all">
+                                </div>
+                            </div>
+
+                            <!-- Experience with Delivery Apps -->
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1">Experiencia
+                                    en Apps de Delivery *</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-500">
+                                        <i class="fa-solid fa-box text-sm"></i>
+                                    </span>
+                                    <select id="heroExperience" required
+                                        class="w-full bg-brand-dark/80 border border-brand-border focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl py-3 pl-10 pr-4 text-sm text-white outline-none transition-all appearance-none">
+                                        <option value="" disabled selected>Selecciona tu situación</option>
+                                        <option value="Trabajo activo en Rappi/PedidosYa/Uber">Ya trabajo en apps
+                                            (Rappi, PedidosYa, Uber, etc.)</option>
+                                        <option value="Tengo cuenta pero no tengo vehículo">Tengo cuenta aprobada pero
+                                            no tengo vehículo</option>
+                                        <option value="Quiero empezar desde cero">Quiero empezar a trabajar de
+                                            repartidor ahora</option>
+                                    </select>
+                                    <span
+                                        class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-500 pointer-events-none">
+                                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Bike Preference -->
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1">Cilindrada
+                                    de Interés</label>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="heroBikeModel" value="110cc Económica" checked
+                                            class="peer sr-only">
+                                        <div
+                                            class="border border-brand-border peer-checked:border-brand-500 peer-checked:bg-brand-500/20 text-center py-2.5 px-2 rounded-xl text-xs font-bold text-gray-300 peer-checked:text-white transition-all">
+                                            🛵 110cc Económica
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="heroBikeModel" value="150cc Potencia"
+                                            class="peer sr-only">
+                                        <div
+                                            class="border border-brand-border peer-checked:border-brand-500 peer-checked:bg-brand-500/20 text-center py-2.5 px-2 rounded-xl text-xs font-bold text-gray-300 peer-checked:text-white transition-all">
+                                            🏍️ 150cc Potencia
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit"
+                                class="w-full gradient-orange hover:opacity-95 text-white font-black text-base py-4 px-6 rounded-xl transition-all shadow-xl flex items-center justify-center gap-3 transform active:scale-98">
+                                <span>SOLICITAR PRE-APROBACIÓN</span>
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+
+                            <p class="text-[11px] text-gray-400 text-center flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-lock text-brand-accent"></i>
+                                Tus datos están seguros. Sin consulta de Veraz / Sistema Crediticio tradicional.
+                            </p>
+
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- PROOF BANNER / STATS -->
+    <section class="py-10 bg-brand-card/40 border-b border-brand-border/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div class="p-4 rounded-2xl bg-brand-card/60 border border-brand-border/40">
+                    <div class="text-2xl sm:text-4xl font-black font-heading text-brand-500">+850</div>
+                    <div class="text-xs sm:text-sm font-semibold text-gray-300 mt-1">Repartidores con Moto Propia</div>
+                </div>
+                <div class="p-4 rounded-2xl bg-brand-card/60 border border-brand-border/40">
+                    <div class="text-2xl sm:text-4xl font-black font-heading text-brand-accent">0%</div>
+                    <div class="text-xs sm:text-sm font-semibold text-gray-300 mt-1">Requisitos Bancarios</div>
+                </div>
+                <div class="p-4 rounded-2xl bg-brand-card/60 border border-brand-border/40">
+                    <div class="text-2xl sm:text-4xl font-black font-heading text-amber-400">24-48h</div>
+                    <div class="text-xs sm:text-sm font-semibold text-gray-300 mt-1">Tiempo Medio de Entrega</div>
+                </div>
+                <div class="p-4 rounded-2xl bg-brand-card/60 border border-brand-border/40">
+                    <div class="text-2xl sm:text-4xl font-black font-heading text-blue-400">100%</div>
+                    <div class="text-xs sm:text-sm font-semibold text-gray-300 mt-1">Titularidad Garantizada</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN CÓMO FUNCIONA (PASO A PASO) -->
+    <section id="como-funciona" class="py-16 lg:py-24 border-b border-brand-border/40 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-brand-500 font-bold text-xs sm:text-sm tracking-widest uppercase">PROCESO TRANSPARENTE
+                    Y DIRECTO</span>
+                <h2 class="text-3xl sm:text-4xl font-black font-heading text-white mt-2">
+                    En 4 simples pasos, la moto <span class="text-brand-500">pasa a ser tuya</span>
+                </h2>
+                <p class="text-gray-400 text-sm sm:text-base mt-3">
+                    Sin sorpresas, sin letra chica y sin intermediarios financieros. Diseñado para que trabajes
+                    tranquilo.
+                </p>
+            </div>
+
+            <!-- Steps Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+
+                <!-- Step 1 -->
+                <div
+                    class="bg-brand-card border border-brand-border/80 rounded-3xl p-6 relative flex flex-col justify-between hover:border-brand-500/60 transition-all group">
+                    <div
+                        class="absolute -top-4 left-6 w-10 h-10 rounded-xl gradient-orange text-white font-black text-lg flex items-center justify-center shadow-lg">
+                        1
+                    </div>
+                    <div class="pt-4 space-y-3">
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-brand-500/10 text-brand-500 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-file-signature"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-heading">Te registras y validamos</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Completa el formulario en línea. Revisamos tu DNI y licencia. No miramos tu historial
+                            crediticio bancario.
+                        </p>
+                    </div>
+                    <div
+                        class="mt-6 pt-4 border-t border-brand-border/40 text-[11px] text-brand-500 font-semibold flex items-center gap-1.5">
+                        <i class="fa-solid fa-clock"></i>
+                        <span>Respuesta en menos de 2 horas</span>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div
+                    class="bg-brand-card border border-brand-border/80 rounded-3xl p-6 relative flex flex-col justify-between hover:border-brand-500/60 transition-all group">
+                    <div
+                        class="absolute -top-4 left-6 w-10 h-10 rounded-xl gradient-orange text-white font-black text-lg flex items-center justify-center shadow-lg">
+                        2
+                    </div>
+                    <div class="pt-4 space-y-3">
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-key"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-heading">Retiras tu Moto 0km</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Firma de contrato de arrendamiento con opción a compra. Te entregamos la moto patentada,
+                            cascos y seguro.
+                        </p>
+                    </div>
+                    <div
+                        class="mt-6 pt-4 border-t border-brand-border/40 text-[11px] text-emerald-400 font-semibold flex items-center gap-1.5">
+                        <i class="fa-solid fa-shield-check"></i>
+                        <span>Lista para salir a trabajar</span>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div
+                    class="bg-brand-card border border-brand-border/80 rounded-3xl p-6 relative flex flex-col justify-between hover:border-brand-500/60 transition-all group">
+                    <div
+                        class="absolute -top-4 left-6 w-10 h-10 rounded-xl gradient-orange text-white font-black text-lg flex items-center justify-center shadow-lg">
+                        3
+                    </div>
+                    <div class="pt-4 space-y-3">
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-heading">Pagas cuota de tus entregas</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Trabajas en tus apps favoritas. La cuota es semanal y muy baja: equivale a solo 2-3 pedidos
+                            diarios.
+                        </p>
+                    </div>
+                    <div
+                        class="mt-6 pt-4 border-t border-brand-border/40 text-[11px] text-amber-400 font-semibold flex items-center gap-1.5">
+                        <i class="fa-solid fa-arrow-trend-up"></i>
+                        <span>Se paga sola trabajando</span>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div
+                    class="bg-brand-card border border-brand-500/80 rounded-3xl p-6 relative flex flex-col justify-between hover:border-brand-500 transition-all group glow-orange">
+                    <div
+                        class="absolute -top-4 left-6 w-10 h-10 rounded-xl bg-emerald-500 text-slate-950 font-black text-lg flex items-center justify-center shadow-lg">
+                        4
+                    </div>
+                    <div class="pt-4 space-y-3">
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-heading">¡La moto es 100% tuya!</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Completas el plazo fijado y realizamos la transferencia de titularidad a tu nombre. Tu
+                            patrimonio creció.
+                        </p>
+                    </div>
+                    <div
+                        class="mt-6 pt-4 border-t border-brand-border/40 text-[11px] text-emerald-400 font-black flex items-center gap-1.5 uppercase">
+                        <i class="fa-solid fa-certificate"></i>
+                        <span>Titularidad Garantizada</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CALCULADORA DE BENEFICIOS E INTERACTIVA -->
+    <section id="calculadora" class="py-16 lg:py-24 bg-brand-card/30 border-b border-brand-border/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-brand-accent font-bold text-xs sm:text-sm tracking-widest uppercase">HERRAMIENTA
+                    INTERACTIVA</span>
+                <h2 class="text-3xl sm:text-4xl font-black font-heading text-white mt-2">
+                    Calcula cómo tu moto <span class="text-brand-accent">se paga sola</span>
+                </h2>
+                <p class="text-gray-400 text-sm sm:text-base mt-2">
+                    Ajusta la cantidad de entregas que haces por día y mira en cuántos días de trabajo cubres tu cuota
+                    semanal.
+                </p>
+            </div>
+
+            <div
+                class="grid lg:grid-cols-12 gap-8 items-center bg-brand-card border border-brand-border rounded-3xl p-6 sm:p-10 shadow-xl">
+
+                <!-- Controls Column -->
+                <div class="lg:col-span-6 space-y-8">
+
+                    <!-- Slider 1: Entregas Diarias -->
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <label class="text-sm font-bold text-white uppercase tracking-wider">Entregas realizas por
+                                día:</label>
+                            <span id="deliveriesVal"
+                                class="text-2xl font-black font-heading text-brand-500 bg-brand-500/10 px-3 py-1 rounded-xl border border-brand-500/30">15
+                                pedidos</span>
+                        </div>
+                        <input type="range" id="deliveriesInput" min="5" max="35" value="15"
+                            class="w-full h-3 bg-brand-dark rounded-lg appearance-none cursor-pointer">
+                        <div class="flex justify-between text-[11px] text-gray-500 mt-2 font-medium">
+                            <span>5 (Part-time)</span>
+                            <span>20 (Jornada normal)</span>
+                            <span>35 (Full-time)</span>
+                        </div>
+                    </div>
+
+                    <!-- Slider 2: Ganancia Media por Pedido -->
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <label class="text-sm font-bold text-white uppercase tracking-wider">Ganancia promedio por
+                                pedido:</label>
+                            <span id="avgEarningVal"
+                                class="text-2xl font-black font-heading text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-xl border border-emerald-500/30">$
+                                2.000</span>
+                        </div>
+                        <input type="range" id="avgEarningInput" min="1200" max="3500" step="100" value="2000"
+                            class="w-full h-3 bg-brand-dark rounded-lg appearance-none cursor-pointer">
+                    </div>
+
+                    <!-- Selected Bike Model Selector -->
+                    <div>
+                        <label class="block text-sm font-bold text-white uppercase tracking-wider mb-3">Modelo elegido
+                            para la simulación:</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button onclick="setCalcModel('110')" id="btnCalc110"
+                                class="p-3.5 rounded-xl border border-brand-500 bg-brand-500/20 text-white font-bold text-xs flex items-center justify-between transition-all text-left">
+                                <div>
+                                    <div class="text-sm font-heading">110cc Urbano</div>
+                                    <div class="text-[10px] text-gray-300 font-normal">Cuota est. $ 28.500/sem</div>
+                                </div>
+                                <i class="fa-solid fa-circle-check text-brand-500"></i>
+                            </button>
+                            <button onclick="setCalcModel('150')" id="btnCalc150"
+                                class="p-3.5 rounded-xl border border-brand-border bg-brand-dark text-gray-400 font-bold text-xs flex items-center justify-between transition-all text-left">
+                                <div>
+                                    <div class="text-sm font-heading">150cc Potencia</div>
+                                    <div class="text-[10px] text-gray-400 font-normal">Cuota est. $ 38.000/sem</div>
+                                </div>
+                                <i class="fa-regular fa-circle text-gray-600"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Results Display Column -->
+                <div
+                    class="lg:col-span-6 bg-brand-dark/90 border border-brand-border/80 rounded-2xl p-6 sm:p-8 flex flex-col justify-between space-y-6">
+                    <div>
+                        <span class="text-[11px] font-bold uppercase tracking-widest text-gray-400">RESULTADO ESTIMADO
+                            RENTCRI</span>
+                        <div class="mt-3 flex items-baseline gap-2">
+                            <span id="weeklyGross" class="text-3xl sm:text-4xl font-black font-heading text-white">$
+                                180.000</span>
+                            <span class="text-xs text-gray-400">/ ganancia bruta semanal (6 días)</span>
+                        </div>
+                    </div>
+
+                    <!-- Breakdown Box -->
+                    <div class="space-y-3 text-xs border-y border-brand-border/60 py-4">
+                        <div class="flex justify-between items-center text-gray-300">
+                            <span>Cuota Semanal estimada:</span>
+                            <span id="calcWeeklyFee" class="font-bold text-brand-500 text-sm">$ 28.500</span>
+                        </div>
+                        <div class="flex justify-between items-center text-gray-300">
+                            <span>Pedidos necesarios para pagar la cuota:</span>
+                            <span id="ordersNeeded" class="font-bold text-amber-400 text-sm">15 pedidos a la
+                                semana</span>
+                        </div>
+                        <div class="flex justify-between items-center text-gray-300">
+                            <span>Tiempo de trabajo para cubrir tu cuota:</span>
+                            <span id="daysNeeded" class="font-bold text-emerald-400 text-sm">¡Solo 1 día de
+                                trabajo!</span>
+                        </div>
+                    </div>
+
+                    <!-- Net Income Result -->
+                    <div
+                        class="bg-emerald-500/10 border border-emerald-500/30 p-4 rounded-xl flex items-center justify-between">
+                        <div>
+                            <div class="text-xs text-emerald-300 font-semibold uppercase">Tu Ganancia Neta Libre
+                                estimada:</div>
+                            <div id="netEarnings" class="text-2xl font-black font-heading text-emerald-400 mt-0.5">$
+                                151.500 / sem</div>
+                        </div>
+                        <i class="fa-solid fa-sack-dollar text-emerald-400 text-3xl"></i>
+                    </div>
+
+                    <a href="#registro"
+                        class="w-full gradient-orange hover:opacity-95 text-white font-bold text-center text-sm py-3 px-4 rounded-xl shadow-lg transition-all">
+                        ¡Quiero esta moto con este plan!
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- COMPARATIVA DIRECTA CON OTROS SISTEMAS -->
+            <div class="mt-16">
+                <h3 class="text-xl sm:text-2xl font-bold font-heading text-white text-center mb-8">
+                    Comparativa: ¿Por qué Rent-to-Own le gana a las opciones tradicionales?
+                </h3>
+
+                <div class="grid md:grid-cols-3 gap-6">
+
+                    <!-- Option 1: Rent to Own (RENTCRI) -->
+                    <div
+                        class="bg-brand-card border-2 border-brand-500 rounded-2xl p-6 relative flex flex-col justify-between shadow-xl glow-orange">
+                        <div
+                            class="absolute -top-3 right-4 bg-brand-500 text-white font-bold text-[10px] uppercase px-3 py-0.5 rounded-full">
+                            RECOMENDADO
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-white font-heading">Plan RENTCRI Rent-to-Own</h4>
+                            <p class="text-xs text-brand-500 font-semibold mt-0.5">Alquiler con opción a compra</p>
+
+                            <ul class="mt-6 space-y-3 text-xs text-gray-300">
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-brand-accent"></i>
+                                    <span><strong>Al final la moto es 100% tuya</strong></span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-brand-accent"></i>
+                                    <span>Requisitos mínimos (DNI + Registro)</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-brand-accent"></i>
+                                    <span>Cuota semanal flexible y fija</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-brand-accent"></i>
+                                    <span>Mantenimiento inicial y seguro incluido</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div
+                            class="mt-6 pt-4 border-t border-brand-border/60 text-center font-bold text-emerald-400 text-sm">
+                            ¡Inversión en TU propio patrimonio!
+                        </div>
+                    </div>
+
+                    <!-- Option 2: Alquiler Común -->
+                    <div
+                        class="bg-brand-card/40 border border-brand-border/60 rounded-2xl p-6 flex flex-col justify-between opacity-80 hover:opacity-100 transition-opacity">
+                        <div>
+                            <h4 class="text-lg font-bold text-white font-heading">Alquiler Común</h4>
+                            <p class="text-xs text-gray-400 mt-0.5">Sin opción a compra</p>
+
+                            <ul class="mt-6 space-y-3 text-xs text-gray-400">
+                                <li class="flex items-center gap-2 text-rose-400">
+                                    <i class="fa-solid fa-circle-xmark"></i>
+                                    <span>La moto NUNCA será tuya</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-gray-500"></i>
+                                    <span>Requisitos accesibles</span>
+                                </li>
+                                <li class="flex items-center gap-2 text-rose-400">
+                                    <i class="fa-solid fa-circle-xmark"></i>
+                                    <span>Gastas dinero semanalmente tirado a la basura</span>
+                                </li>
+                                <li class="flex items-center gap-2 text-rose-400">
+                                    <i class="fa-solid fa-circle-xmark"></i>
+                                    <span>Limitación de kilometraje estricto</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div
+                            class="mt-6 pt-4 border-t border-brand-border/60 text-center font-bold text-rose-400 text-xs">
+                            Pagas de por vida sin recibir nada
+                        </div>
+                    </div>
+
+                    <!-- Option 3: Crédito Bancario -->
+                    <div
+                        class="bg-brand-card/40 border border-brand-border/60 rounded-2xl p-6 flex flex-col justify-between opacity-80 hover:opacity-100 transition-opacity">
+                        <div>
+                            <h4 class="text-lg font-bold text-white font-heading">Crédito Bancario Tradicional</h4>
+                            <p class="text-xs text-gray-400 mt-0.5">Financiamiento de Concesionaria</p>
+
+                            <ul class="mt-6 space-y-3 text-xs text-gray-400">
+                                <li class="flex items-center gap-2 text-rose-400">
+                                    <i class="fa-solid fa-circle-xmark"></i>
+                                    <span>Exigen recibo de sueldo / Veraz limpio</span>
+                                </li>
+                                <li class="flex items-center gap-2 text-rose-400">
+                                    <i class="fa-solid fa-circle-xmark"></i>
+                                    <span>Intereses usureros y cuotas fijas altas</span>
+                                </li>
+                                <li class="flex items-center gap-2 text-rose-400">
+                                    <i class="fa-solid fa-circle-xmark"></i>
+                                    <span>Gastos de otorgamiento y patente inicial muy altos</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-gray-500"></i>
+                                    <span>Moto a tu nombre con prenda</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div
+                            class="mt-6 pt-4 border-t border-brand-border/60 text-center font-bold text-rose-400 text-xs">
+                            Imposible de acceder para la mayoría
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECCIÓN MOTOS DISPONIBLES (FICHAS RÁPIDAS) -->
+    <section id="motos" class="py-16 lg:py-24 border-b border-brand-border/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-brand-500 font-bold text-xs sm:text-sm tracking-widest uppercase">CATÁLOGO 0KM</span>
+                <h2 class="text-3xl sm:text-4xl font-black font-heading text-white mt-2">
+                    Elegida por su alto rendimiento y <span class="text-brand-500">bajo consumo</span>
+                </h2>
+                <p class="text-gray-400 text-sm sm:text-base mt-2">
+                    Motos diseñadas para aguantar jornadas intensas de trabajo con el mínimo gasto en combustible.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+
+                <!-- Model Card 1: 110cc -->
+                <div
+                    class="bg-brand-card border border-brand-border rounded-3xl overflow-hidden hover:border-brand-500/60 transition-all group flex flex-col justify-between">
+                    <div>
+                        <!-- Card Header & Badge -->
+                        <div
+                            class="p-6 bg-gradient-to-b from-brand-dark/80 to-transparent flex justify-between items-start">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-brand-500">MÁXIMO AHORRO
+                                    URBANO</span>
+                                <h3 class="text-2xl font-black font-heading text-white mt-1">110cc Económica & Ágil</h3>
+                                <p class="text-xs text-gray-400">Ej. Honda Wave / Gilera Smash / Corven Energy</p>
+                            </div>
+                            <span
+                                class="bg-emerald-500/20 text-emerald-400 font-bold text-xs px-3 py-1 rounded-full border border-emerald-500/30">
+                                Popular
+                            </span>
+                        </div>
+
+                        <!-- Visual Graphic Illustration -->
+                        <div class="px-6 py-4 flex justify-center bg-brand-dark/40 border-y border-brand-border/40">
+                            <div
+                                class="w-full h-44 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50 flex flex-col items-center justify-center relative overflow-hidden group-hover:border-brand-500/40 transition-all">
+                                <div
+                                    class="text-6xl text-brand-500/80 mb-2 transform group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-motorcycle"></i>
+                                </div>
+                                <span class="text-xs text-gray-400 font-semibold">Cilindrada: 110 cc • Monocilíndrico
+                                    4T</span>
+                                <div
+                                    class="absolute bottom-2 right-3 text-[10px] text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-500/30">
+                                    ⚡ Rinde +50 km por Litro
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Specs Grid -->
+                        <div class="p-6 space-y-3 text-xs">
+                            <div class="flex justify-between py-1 border-b border-brand-border/40">
+                                <span class="text-gray-400">Consumo de combustible:</span>
+                                <span class="font-bold text-white">~1.8 Litros / 100 km</span>
+                            </div>
+                            <div class="flex justify-between py-1 border-b border-brand-border/40">
+                                <span class="text-gray-400">Frenos / Llantas:</span>
+                                <span class="font-bold text-white">Tambor / Aleación liviana</span>
+                            </div>
+                            <div class="flex justify-between py-1 border-b border-brand-border/40">
+                                <span class="text-gray-400">Encendido:</span>
+                                <span class="font-bold text-white">Eléctrico y Patada</span>
+                            </div>
+                            <div class="flex justify-between py-1 border-b border-brand-border/40">
+                                <span class="text-gray-400">Incluye en cuota:</span>
+                                <span class="font-bold text-emerald-400">Casco + Service + Seguro</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Footer CTA -->
+                    <div class="p-6 pt-0 space-y-4">
+                        <div class="bg-brand-dark p-4 rounded-xl text-center border border-brand-border/60">
+                            <span class="text-[11px] text-gray-400 font-semibold block uppercase">Cuota semanal estimada
+                                desde:</span>
+                            <span class="text-3xl font-black font-heading text-brand-500">$ 28.500 <span
+                                    class="text-xs font-normal text-gray-400">/semana</span></span>
+                        </div>
+                        <button onclick="selectBikeAndScroll('110cc Económica')"
+                            class="w-full gradient-orange hover:opacity-95 text-white font-bold py-3.5 px-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-sm">
+                            <span>Quiero esta moto (110cc)</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Model Card 2: 150cc -->
+                <div
+                    class="bg-brand-card border border-brand-border rounded-3xl overflow-hidden hover:border-brand-500/60 transition-all group flex flex-col justify-between">
+                    <div>
+                        <!-- Card Header & Badge -->
+                        <div
+                            class="p-6 bg-gradient-to-b from-brand-dark/80 to-transparent flex justify-between items-start">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-amber-400">MAYOR POTENCIA Y
+                                    CONFORT</span>
+                                <h3 class="text-2xl font-black font-heading text-white mt-1">150cc Potencia & Ruta</h3>
+                                <p class="text-xs text-gray-400">Ej. Honda GLH 150 / Zanella ZB / Motomel S2</p>
+                            </div>
+                            <span
+                                class="bg-amber-500/20 text-amber-400 font-bold text-xs px-3 py-1 rounded-full border border-amber-500/30">
+                                Alto Rendimiento
+                            </span>
+                        </div>
+
+                        <!-- Visual Graphic Illustration -->
+                        <div class="px-6 py-4 flex justify-center bg-brand-dark/40 border-y border-brand-border/40">
+                            <div
+                                class="w-full h-44 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50 flex flex-col items-center justify-center relative overflow-hidden group-hover:border-brand-500/40 transition-all">
+                                <div
+                                    class="text-6xl text-amber-400/80 mb-2 transform group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-motorcycle"></i>
+                                </div>
+                                <span class="text-xs text-gray-400 font-semibold">Cilindrada: 150 cc • 5
+                                    Velocidades</span>
+                                <div
+                                    class="absolute bottom-2 right-3 text-[10px] text-amber-300 font-bold bg-amber-950/80 px-2 py-0.5 rounded border border-amber-500/30">
+                                    ⚡ Ideal tramos largos / Autopista
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Specs Grid -->
+                        <div class="p-6 space-y-3 text-xs">
+                            <div class="flex justify-between py-1 border-b border-brand-border/40">
+                                <span class="text-gray-400">Consumo de combustible:</span>
+                                <span class="font-bold text-white">~2.3 Litros / 100 km</span>
+                            </div>
+                            <div class="flex justify-between py-1 border-b border-brand-border/40">
+                                <span class="text-gray-400">Frenos / Llantas:</span>
+                                <span class="font-bold text-white">Disco delantero / Aleación</span>
+                            </div>
+                            <div class="flex justify-between py-1 border-b border-brand-border/40">
+                                <span class="text-gray-400">Tanque de combustible:</span>
+                                <span class="font-bold text-white">12 Litros (Gran autonomía)</span>
+                            </div>
+                            <div class="flex justify-between py-1 border-b border-brand-border/40">
+                                <span class="text-gray-400">Incluye en cuota:</span>
+                                <span class="font-bold text-emerald-400">Casco + Service + Seguro</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Footer CTA -->
+                    <div class="p-6 pt-0 space-y-4">
+                        <div class="bg-brand-dark p-4 rounded-xl text-center border border-brand-border/60">
+                            <span class="text-[11px] text-gray-400 font-semibold block uppercase">Cuota semanal estimada
+                                desde:</span>
+                            <span class="text-3xl font-black font-heading text-brand-500">$ 38.000 <span
+                                    class="text-xs font-normal text-gray-400">/semana</span></span>
+                        </div>
+                        <button onclick="selectBikeAndScroll('150cc Potencia')"
+                            class="w-full gradient-orange hover:opacity-95 text-white font-bold py-3.5 px-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-sm">
+                            <span>Quiero esta moto (150cc)</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- REQUISITOS MÍNIMOS (TRANSPARENCIA) -->
+    <section id="requisitos" class="py-16 lg:py-24 bg-brand-card/30 border-b border-brand-border/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="text-brand-accent font-bold text-xs sm:text-sm tracking-widest uppercase">CERO TRABAS
+                        BANCARIAS</span>
+                    <h2 class="text-3xl sm:text-4xl font-black font-heading text-white">
+                        Requisitos simples para que empieces <span class="text-brand-accent">ya mismo</span>
+                    </h2>
+                    <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+                        Sabemos lo difícil que es acceder a un crédito bancario si eres trabajador independiente o
+                        delivery. Por eso simplificamos la validación al máximo.
+                    </p>
+
+                    <div class="p-4 rounded-2xl bg-brand-card border border-brand-border/80 flex items-center gap-4">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <p class="text-xs text-gray-300">
+                            <strong class="text-white">¿Estás en Veraz?</strong> No te preocupes. Analizamos tu
+                            capacidad de trabajo actual, no tus deudas pasadas.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Requirements Checklist -->
+                <div class="lg:col-span-7">
+                    <div class="grid sm:grid-cols-2 gap-4">
+
+                        <div class="bg-brand-card border border-brand-border rounded-2xl p-5 flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg shrink-0">
+                                <i class="fa-solid fa-id-card"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-base">DNI Vigente</h4>
+                                <p class="text-xs text-gray-400 mt-1">DNI argentino o radicación en trámite/definitiva.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="bg-brand-card border border-brand-border rounded-2xl p-5 flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg shrink-0">
+                                <i class="fa-solid fa-id-badge"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-base">Licencia de Conducir</h4>
+                                <p class="text-xs text-gray-400 mt-1">Registro de moto vigentes para la cilindrada
+                                    elegida.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-brand-card border border-brand-border rounded-2xl p-5 flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg shrink-0">
+                                <i class="fa-solid fa-mobile-screen-button"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-base">Cuenta en App o Ganas</h4>
+                                <p class="text-xs text-gray-400 mt-1">Perfil activo en Rappi, PedidosYa, Uber o
+                                    predisposición para trabajar.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-brand-card border border-brand-border rounded-2xl p-5 flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg shrink-0">
+                                <i class="fa-solid fa-house-user"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-base">Demostración de Domicilio</h4>
+                                <p class="text-xs text-gray-400 mt-1">Un servicio o factura a tu nombre o certificado de
+                                    residencia.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- PREGUNTAS FRECUENTES (FAQ) -->
+    <section id="faq" class="py-16 lg:py-24 border-b border-brand-border/40">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="text-center mb-14">
+                <span class="text-brand-500 font-bold text-xs sm:text-sm tracking-widest uppercase">TRANSPARENCIA
+                    TOTAL</span>
+                <h2 class="text-3xl sm:text-4xl font-black font-heading text-white mt-2">
+                    Preguntas Frecuentes
+                </h2>
+                <p class="text-gray-400 text-sm mt-2">
+                    Resolvemos tus dudas antes de solicitar tu vehículo.
+                </p>
+            </div>
+
+            <div class="space-y-4" id="faqAccordion">
+
+                <!-- FAQ Item 1 -->
+                <div class="bg-brand-card border border-brand-border rounded-2xl overflow-hidden transition-all">
+                    <button onclick="toggleFaq(1)"
+                        class="w-full p-5 text-left font-bold text-white text-base flex justify-between items-center hover:text-brand-500 transition-colors">
+                        <span>¿Qué incluye la cuota semanal?</span>
+                        <i id="faqIcon-1" class="fa-solid fa-chevron-down text-brand-500 transition-transform"></i>
+                    </button>
+                    <div id="faqContent-1"
+                        class="hidden px-5 pb-5 text-xs sm:text-sm text-gray-300 border-t border-brand-border/40 pt-3 leading-relaxed">
+                        Tu cuota semanal incluye: el uso del vehículo 0km, seguro contra robo y responsabilidad civil,
+                        cascos reglamentarios, mantenimiento preventivo programado (services de aceite y filtros) y la
+                        amortización del valor del vehículo para el traspaso final.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="bg-brand-card border border-brand-border rounded-2xl overflow-hidden transition-all">
+                    <button onclick="toggleFaq(2)"
+                        class="w-full p-5 text-left font-bold text-white text-base flex justify-between items-center hover:text-brand-500 transition-colors">
+                        <span>¿En qué momento la moto pasa a ser 100% mía?</span>
+                        <i id="faqIcon-2" class="fa-solid fa-chevron-down text-brand-500 transition-transform"></i>
+                    </button>
+                    <div id="faqContent-2"
+                        class="hidden px-5 pb-5 text-xs sm:text-sm text-gray-300 border-t border-brand-border/40 pt-3 leading-relaxed">
+                        Al completar la totalidad de las cuotas estipuladas en tu plan de Rent-to-Own, se emite el
+                        formulario 08 y los certificados de transferencia para que registres la moto a tu nombre. ¡Sin
+                        pagos sorpresa finales ni gastos ocultos!
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="bg-brand-card border border-brand-border rounded-2xl overflow-hidden transition-all">
+                    <button onclick="toggleFaq(3)"
+                        class="w-full p-5 text-left font-bold text-white text-base flex justify-between items-center hover:text-brand-500 transition-colors">
+                        <span>¿Qué pasa si la moto requiere service o mantenimiento?</span>
+                        <i id="faqIcon-3" class="fa-solid fa-chevron-down text-brand-500 transition-transform"></i>
+                    </button>
+                    <div id="faqContent-3"
+                        class="hidden px-5 pb-5 text-xs sm:text-sm text-gray-300 border-t border-brand-border/40 pt-3 leading-relaxed">
+                        Los mantenimientos programados por desgaste normal (cambio de aceite, regulación de frenos, kit
+                        de transmisión inicial) están cubiertos en nuestros talleres aliados para garantizar que tu
+                        herramienta de trabajo no se detenga.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="bg-brand-card border border-brand-border rounded-2xl overflow-hidden transition-all">
+                    <button onclick="toggleFaq(4)"
+                        class="w-full p-5 text-left font-bold text-white text-base flex justify-between items-center hover:text-brand-500 transition-colors">
+                        <span>¿Cómo se realizan los pagos semanales?</span>
+                        <i id="faqIcon-4" class="fa-solid fa-chevron-down text-brand-500 transition-transform"></i>
+                    </button>
+                    <div id="faqContent-4"
+                        class="hidden px-5 pb-5 text-xs sm:text-sm text-gray-300 border-t border-brand-border/40 pt-3 leading-relaxed">
+                        Aceptamos transferencias desde tu cuenta de Mercado Pago, Ualá o cualquier cuenta bancaria.
+                        Pagas semanalmente en el día acordado directamente desde las ganancias que generas en tus
+                        aplicaciones de delivery.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="bg-brand-card border border-brand-border rounded-2xl overflow-hidden transition-all">
+                    <button onclick="toggleFaq(5)"
+                        class="w-full p-5 text-left font-bold text-white text-base flex justify-between items-center hover:text-brand-500 transition-colors">
+                        <span>¿Puedo adelantar cuotas para terminar antes?</span>
+                        <i id="faqIcon-5" class="fa-solid fa-chevron-down text-brand-500 transition-transform"></i>
+                    </button>
+                    <div id="faqContent-5"
+                        class="hidden px-5 pb-5 text-xs sm:text-sm text-gray-300 border-t border-brand-border/40 pt-3 leading-relaxed">
+                        ¡Sí! Si tienes semanas con producción alta y deseas adelantar cuotas, puedes hacerlo sin ninguna
+                        penalización ni interés adicional. Esto reduce el plazo y te convierte en dueño aún más rápido.
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CTA FINAL + FORMULARIO SECUNDARIO -->
+    <section class="py-16 lg:py-24 relative overflow-hidden bg-gradient-to-b from-brand-card to-brand-dark">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+
+            <span
+                class="inline-block bg-brand-500/20 text-brand-500 border border-brand-500/30 text-xs font-black uppercase px-4 py-1.5 rounded-full mb-4">
+                ⚡ RESERVA ANTES DE QUE SE AGOTEN LOS CUPOS
+            </span>
+
+            <h2 class="text-3xl sm:text-5xl font-black font-heading text-white max-w-3xl mx-auto leading-tight">
+                No sigas regalando tu esfuerzo. <span class="text-transparent bg-clip-text gradient-orange">Empieza a
+                    pagar TU propia moto.</span>
+            </h2>
+
+            <p class="text-gray-300 text-sm sm:text-base mt-4 max-w-2xl mx-auto">
+                Los cupos para entrega inmediata esta semana son limitados. Deja tus datos y nuestro equipo te
+                contactará por WhatsApp en menos de 2 horas.
+            </p>
+
+            <!-- Secondary Fast Form Container -->
+            <div
+                class="mt-10 bg-brand-card border-2 border-brand-500/60 p-6 sm:p-10 rounded-3xl shadow-2xl max-w-xl mx-auto text-left glow-orange">
+                <form id="finalLeadForm" onsubmit="handleFormSubmit(event, 'final')" class="space-y-4">
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1">Nombre
+                            Completo *</label>
+                        <input type="text" id="finalName" required placeholder="Ej. Carlos Rodríguez"
+                            class="w-full bg-brand-dark border border-brand-border focus:border-brand-500 rounded-xl py-3 px-4 text-sm text-white placeholder-gray-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1">WhatsApp de
+                            Contacto *</label>
+                        <input type="tel" id="finalPhone" required placeholder="Ej. 11 9876 5432"
+                            class="w-full bg-brand-dark border border-brand-border focus:border-brand-500 rounded-xl py-3 px-4 text-sm text-white placeholder-gray-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1">Zona donde
+                            vas a trabajar *</label>
+                        <input type="text" id="finalZone" required placeholder="Ej. CABA / Zona Sur / La Plata"
+                            class="w-full bg-brand-dark border border-brand-border focus:border-brand-500 rounded-xl py-3 px-4 text-sm text-white placeholder-gray-500 outline-none">
+                    </div>
+
+                    <button type="submit"
+                        class="w-full gradient-orange hover:opacity-95 text-white font-black text-base py-4 px-6 rounded-xl transition-all shadow-xl flex items-center justify-center gap-2 transform active:scale-98">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>RESERVAR MI MOTO 0KM AHORA</span>
+                    </button>
+
+                    <p class="text-[11px] text-gray-400 text-center mt-2">
+                        🔒 Sin compromiso. Revisión prioritaria de solicitud.
+                    </p>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER (RENTCRI) -->
+    <footer class="border-t border-brand-border/60 bg-brand-dark py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+
+                <div class="flex items-center gap-2">
+                    <div
+                        class="w-8 h-8 rounded-lg gradient-orange flex items-center justify-center text-white font-black text-sm">
+                        <i class="fa-solid fa-motorcycle"></i>
+                    </div>
+                    <span class="font-heading font-black text-xl text-white">RENT<span
+                            class="text-brand-500">CRI</span></span>
+                </div>
+
+                <p class="text-xs text-gray-500 text-center md:text-left">
+                    © 2026 RENTCRI Mobility Systems Inc. Todos los derechos reservados. Solución de movilidad urbana
+                    Rent-to-Own.
+                </p>
+
+                <div class="flex items-center gap-4 text-gray-400 text-sm">
+                    <a href="#" class="hover:text-brand-500 transition-colors"><i
+                            class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="hover:text-brand-500 transition-colors"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#" class="hover:text-brand-500 transition-colors"><i class="fa-brands fa-whatsapp"></i></a>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Bottom Bar for Mobile -->
+    <div
+        class="fixed bottom-0 inset-x-0 bg-brand-dark/95 border-t border-brand-border backdrop-blur-lg p-3 z-40 sm:hidden flex items-center justify-between gap-3 shadow-2xl">
+        <div class="flex flex-col">
+            <span class="text-[10px] text-gray-400 uppercase font-bold">Motos 0km Disponibles</span>
+            <span class="text-xs font-black text-emerald-400">Entrega en 24-48h</span>
+        </div>
+        <a href="#registro"
+            class="gradient-orange text-white font-bold text-xs px-5 py-2.5 rounded-xl flex items-center gap-2 shadow-lg">
+            <span>Reservar Moto</span>
+            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </a>
+    </div>
+
+    <!-- Confirmation Modal Dialog -->
+    <div id="successModal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div
+            class="bg-brand-card border-2 border-brand-500 rounded-3xl p-6 sm:p-8 max-w-md w-full text-center space-y-5 relative glow-orange">
+
+            <div
+                class="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 text-3xl flex items-center justify-center mx-auto border border-emerald-500/40">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+
+            <h3 class="text-2xl font-black font-heading text-white">¡Solicitud Recibida!</h3>
+
+            <p id="modalMessage" class="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                Hola <strong id="modalUserName" class="text-white"></strong>, hemos recibido tus datos correctamente. Tu
+                cupo para moto 0km ha sido pre-reservado.
+            </p>
+
+            <div
+                class="bg-brand-dark/80 p-4 rounded-xl border border-brand-border/60 text-xs text-amber-300 font-semibold flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-lg shrink-0"></i>
+                <span>Haz clic abajo para chatear inmediatamente con un asesor vía WhatsApp.</span>
+            </div>
+
+            <a id="whatsappModalBtn" href="#" target="_blank"
+                class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-sm shadow-lg">
+                <i class="fa-brands fa-whatsapp text-lg"></i>
+                <span>Iniciar Chat de WhatsApp Ahora</span>
+            </a>
+
+            <button onclick="closeModal()" class="text-xs text-gray-500 underline hover:text-gray-300">
+                Cerrar ventana
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let selectedCalcModel = '110'; // 110 or 150
+
+        // Initialize dynamic events on load
+        window.onload = function () {
+            initCalculator();
+            initUrgencyCountdown();
+        };
+
+        function initCalculator() {
+            const deliveriesInput = document.getElementById('deliveriesInput');
+            const avgEarningInput = document.getElementById('avgEarningInput');
+
+            if (deliveriesInput && avgEarningInput) {
+                deliveriesInput.addEventListener('input', calculateROI);
+                avgEarningInput.addEventListener('input', calculateROI);
+                calculateROI();
+            }
+        }
+
+        function setCalcModel(model) {
+            selectedCalcModel = model;
+            const btn110 = document.getElementById('btnCalc110');
+            const btn150 = document.getElementById('btnCalc150');
+
+            if (model === '110') {
+                btn110.className = "p-3.5 rounded-xl border border-brand-500 bg-brand-500/20 text-white font-bold text-xs flex items-center justify-between transition-all text-left";
+                btn110.querySelector('i').className = "fa-solid fa-circle-check text-brand-500";
+
+                btn150.className = "p-3.5 rounded-xl border border-brand-border bg-brand-dark text-gray-400 font-bold text-xs flex items-center justify-between transition-all text-left";
+                btn150.querySelector('i').className = "fa-regular fa-circle text-gray-600";
+            } else {
+                btn150.className = "p-3.5 rounded-xl border border-brand-500 bg-brand-500/20 text-white font-bold text-xs flex items-center justify-between transition-all text-left";
+                btn150.querySelector('i').className = "fa-solid fa-circle-check text-brand-500";
+
+                btn110.className = "p-3.5 rounded-xl border border-brand-border bg-brand-dark text-gray-400 font-bold text-xs flex items-center justify-between transition-all text-left";
+                btn110.querySelector('i').className = "fa-regular fa-circle text-gray-600";
+            }
+            calculateROI();
+        }
+
+        function calculateROI() {
+            const dailyDeliveries = parseInt(document.getElementById('deliveriesInput').value);
+            const avgEarning = parseInt(document.getElementById('avgEarningInput').value);
+
+            // Update UI slider labels
+            document.getElementById('deliveriesVal').innerText = `${dailyDeliveries} pedidos`;
+            document.getElementById('avgEarningVal').innerText = `$ ${avgEarning.toLocaleString('es-AR')}`;
+
+            // Calculations based on 6 days working per week
+            const dailyEarning = dailyDeliveries * avgEarning;
+            const weeklyGross = dailyEarning * 6;
+
+            const weeklyFee = selectedCalcModel === '110' ? 28500 : 38000;
+            const ordersNeeded = Math.ceil(weeklyFee / avgEarning);
+            const daysNeeded = (weeklyFee / dailyEarning).toFixed(1);
+            const netEarnings = weeklyGross - weeklyFee;
+
+            // Render Output
+            document.getElementById('weeklyGross').innerText = `$ ${weeklyGross.toLocaleString('es-AR')}`;
+            document.getElementById('calcWeeklyFee').innerText = `$ ${weeklyFee.toLocaleString('es-AR')}`;
+            document.getElementById('ordersNeeded').innerText = `${ordersNeeded} pedidos a la semana`;
+
+            if (daysNeeded <= 1) {
+                document.getElementById('daysNeeded').innerText = `¡Solo ${daysNeeded} día de trabajo!`;
+            } else {
+                document.getElementById('daysNeeded').innerText = `${daysNeeded} días de trabajo`;
+            }
+
+            document.getElementById('netEarnings').innerText = `$ ${netEarnings.toLocaleString('es-AR')} / sem`;
+        }
+
+        function selectBikeAndScroll(modelName) {
+            // Check radio button in hero form
+            const radio110 = document.querySelector('input[name="heroBikeModel"][value="110cc Económica"]');
+            const radio150 = document.querySelector('input[name="heroBikeModel"][value="150cc Potencia"]');
+
+            if (modelName.includes('110') && radio110) {
+                radio110.checked = true;
+            } else if (radio150) {
+                radio150.checked = true;
+            }
+
+            // Scroll smoothly to lead form
+            document.getElementById('registro').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleFaq(index) {
+            const content = document.getElementById(`faqContent-${index}`);
+            const icon = document.getElementById(`faqIcon-${index}`);
+
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function handleFormSubmit(event, formType) {
+            event.preventDefault();
+
+            let name = '', phone = '', zone = '', experience = '';
+
+            if (formType === 'hero') {
+                name = document.getElementById('heroName').value;
+                phone = document.getElementById('heroPhone').value;
+                zone = document.getElementById('heroZone').value;
+                experience = document.getElementById('heroExperience').value;
+            } else {
+                name = document.getElementById('finalName').value;
+                phone = document.getElementById('finalPhone').value;
+                zone = document.getElementById('finalZone').value;
+                experience = "Solicitud desde formulario directo CTA final";
+            }
+
+            // Populate Modal
+            document.getElementById('modalUserName').innerText = name;
+
+            // Generate customized WhatsApp pre-filled message for RENTCRI
+            const waMessage = encodeURIComponent(
+                `Hola RENTCRI! Mi nombre es ${name}. Estoy interesado en alquilar una Moto 0km con opción a compra (Rent-to-Own).\n` +
+                `📍 Zona: ${zone}\n` +
+                `📱 Teléfono: ${phone}\n` +
+                `💼 Situación: ${experience}`
+            );
+
+            // WhatsApp link
+            const waUrl = `https://wa.me/5491100000000?text=${waMessage}`;
+            document.getElementById('whatsappModalBtn').href = waUrl;
+
+            // Show Modal
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').classList.add('hidden');
+        }
+
+        function initUrgencyCountdown() {
+            let spots = 7;
+            setInterval(() => {
+                if (Math.random() > 0.7 && spots > 2) {
+                    spots--;
+                    const spotsEl = document.getElementById('spotsLeft');
+                    if (spotsEl) {
+                        spotsEl.innerText = `${spots} motos 0km`;
+                    }
+                }
+            }, 12000);
+        }
+    </script>
+</body>
+
+</html>
